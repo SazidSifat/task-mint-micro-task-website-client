@@ -1,53 +1,64 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hook/useAuth';
 import axios from 'axios';
 import { updateProfile } from 'firebase/auth';
-import { auth } from '../../Firebase/firebase.config';
-import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 const Register = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
-
     const { registerWithEmailPass } = useAuth()
+    const navigate = useNavigate()
+    const { state } = useLocation()
 
 
     const onsubmit = async (data) => {
         const imgData = data.image[0]
-        const imageFormData = new FormData();
-        imageFormData.append('image', imgData);
-        console.log(import.meta.env.VITE_imgBBApi);
-        const response = await axios.post(
-            `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgBBApi}`, imageFormData
-        );
-        const imageUrl = response?.data?.data?.display_url;
 
+        const { name, email, role } = data
+
+
+        let coin = 0
+
+        if (role === "buyer") {
+            coin = 50
+        } else if (role === "worker") {
+            coin = 10
+        }
+
+
+        // const imageFormData = new FormData();
+        // imageFormData.append('image', imgData);
+        // console.log(import.meta.env.VITE_imgBBApi);
+        // const response = await axios.post(
+        //     `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgBBApi}`, imageFormData
+        // );
+        // const imageUrl = response?.data?.data?.display_url;
+
+        const userInfo = {
+            name,
+            email,
+            role,
+            coin,
+            
+        }
 
 
         registerWithEmailPass(data.email, data.password)
-            .then((res) => {
-                console.log(res)
-                updateProfile(auth, { displayName: data.name, photoURL: imageUrl })
-
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Registration Successful",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-
+            .then(() => {
+                // updateProfile(res.user, { displayName: data.name, photoURL: imageUrl })
+                axios.post('http://localhost:3000/users', userInfo)
+                .then(res=>{
+                    console.log( res.data )
+                })
+                toast.success("Registration Successful")
+                // navigate(state ? state : '/')
             })
             .catch((err) => {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Something Went Wrong ! ",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                console.log(err)
+                toast.error("Something Went Wrong")
             })
 
 
