@@ -2,87 +2,70 @@
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
-  name: "taskmint"; /* your theme name */
+  name: "taskmint";
   default: true;
 
-  --color-base-100: #f9fafb; /* light background */
+  --color-base-100: #f9fafb;
   --color-base-200: #f3f4f6;
   --color-base-300: #e5e7eb;
-  --color-base-content: #1e293b; /* slate-800 */
+  --color-base-content: #1e293b;
 
-  --color-primary: #10b981; /* emerald-500 */
+  --color-primary: #5a716b;
   --color-primary-content: #ffffff;
 
-  --color-secondary: #facc15; /* amber-400 */
+  --color-secondary: #e6b980; /* soft beige */
   --color-secondary-content: #1e1e1e;
 
-  --color-accent: #14b8a6; /* teal-500 */
+  --color-accent: #d97706; /* amber-600 */
   --color-accent-content: #ffffff;
 
-  --color-neutral: #6b7280; /* gray-500 */
+  --color-neutral: #2e3d39; /* darkened primary for body text */
   --color-neutral-content: #f9fafb;
 
-  --color-info: #3b82f6; /* blue-500 */
+  --color-info: #3b82f6;
   --color-info-content: #ffffff;
 
-  --color-success: #22c55e; /* green-500 */
+  --color-success: #10b981;
   --color-success-content: #ffffff;
 
-  --color-warning: #f59e0b; /* amber-500 */
+  --color-warning: #f59e0b;
   --color-warning-content: #1e293b;
 
-  --color-error: #ef4444; /* red-500 */
+  --color-error: #ef4444;
   --color-error-content: #ffffff;
-
-  /* border radius */
-  --radius-selector: 1rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
-
-  /* base sizes */
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-
-  /* border size */
-  --border: 1px;
-
-  /* effects */
-  --depth: 1;
-  --noise: 0;
 }
 
 @plugin "daisyui/theme" {
-  name: "taskmintDark"; /* your theme name */
+  name: "taskmintDark";
   default: false;
 
-  --color-base-100: #1F2937;
-    --color-base-200: #374151;
-    --color-base-300: #4B5563;
-    --color-base-content: #F9FAFB;
+  --color-base-100: #1f2937;
+  --color-base-200: #374151;
+  --color-base-300: #4b5563;
+  --color-base-content: #f9fafb;
 
-    --color-primary: #34D399; /* brighter emerald for dark bg */
-    --color-primary-content: #1F2937;
+  --color-primary: #7e938e; /* lighter version for dark bg contrast */
+  --color-primary-content: #1f2937;
 
-    --color-secondary: #FBBF24; /* stronger amber */
-    --color-secondary-content: #1F2937;
+  --color-secondary: #facc99; /* soft warm beige */
+  --color-secondary-content: #1f2937;
 
-    --color-accent: #2DD4BF; /* brighter teal */
-    --color-accent-content: #1F2937;
+  --color-accent: #fbbf24; /* amber for pop */
+  --color-accent-content: #1f2937;
 
-    --color-neutral: #9CA3AF; /* gray-400 */
-    --color-neutral-content: #1F2937;
+  --color-neutral: #94a3b8; /* slate-400 */
+  --color-neutral-content: #1f2937;
 
-    --color-info: #60A5FA;
-    --color-info-content: #1F2937;
+  --color-info: #60a5fa;
+  --color-info-content: #1f2937;
 
-    --color-success: #4ADE80;
-    --color-success-content: #1F2937;
+  --color-success: #34d399;
+  --color-success-content: #1f2937;
 
-    --color-warning: #FBBF24;
-    --color-warning-content: #1F2937;
+  --color-warning: #fbbf24;
+  --color-warning-content: #1f2937;
 
-    --color-error: #F87171;
-    --color-error-content: #1F2937;
-
-
+  --color-error: #f87171;
+  --color-error-content: #1f2937;
 }
+

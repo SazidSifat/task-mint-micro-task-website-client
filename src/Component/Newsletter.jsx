@@ -14,7 +14,7 @@ const Newsletter = () => {
     };
 
     return (
-        <section className="bg-primary/70   max-w-6xl mx-auto rounded-xl py-20  px-4 md:px-16">
+        <section className="bg-primary/70 text-primary-content  max-w-6xl mx-auto rounded-xl py-20  px-4 md:px-16">
             <h2 className="text-3xl font-bold text-center mb-6">Subscribe to Our Newsletter</h2>
             <p className="text-center mb-8 opacity-80 max-w-xl mx-auto">
                 Stay updated with the latest news and offers. We promise not to spam!

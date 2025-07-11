@@ -29,32 +29,33 @@ const Register = () => {
         }
 
 
-        // const imageFormData = new FormData();
-        // imageFormData.append('image', imgData);
-        // console.log(import.meta.env.VITE_imgBBApi);
-        // const response = await axios.post(
-        //     `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgBBApi}`, imageFormData
-        // );
-        // const imageUrl = response?.data?.data?.display_url;
+        const imageFormData = new FormData();
+        imageFormData.append('image', imgData);
+        console.log(import.meta.env.VITE_imgBBApi);
+        const response = await axios.post(
+            `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgBBApi}`, imageFormData
+        );
+        const imageUrl = response?.data?.data?.display_url;
 
         const userInfo = {
             name,
             email,
             role,
             coin,
-            
+            imageUrl
+
         }
 
 
         registerWithEmailPass(data.email, data.password)
-            .then(() => {
-                // updateProfile(res.user, { displayName: data.name, photoURL: imageUrl })
+            .then((res) => {
+                updateProfile(res.user, { displayName: data.name, photoURL: imageUrl })
                 axios.post('http://localhost:3000/users', userInfo)
-                .then(res=>{
-                    console.log( res.data )
-                })
+                    .then(res => {
+                        console.log(res.data)
+                    })
                 toast.success("Registration Successful")
-                // navigate(state ? state : '/')
+                navigate(state ? state : '/dashboard')
             })
             .catch((err) => {
                 console.log(err)
