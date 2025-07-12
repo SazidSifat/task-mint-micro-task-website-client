@@ -6,6 +6,7 @@ import Register from "../Pages/Auth/Register";
 import PrivateRoute from "../Shared/PrivateRoute";
 import BuyerDashboard from "../Layouts/BuyerDashboard.";
 import AddTask from "../Component/Buyer/AddTask";
+import MyTask from "../Component/Buyer/Mytask";
 
 
 const router = createBrowserRouter([
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
                 path:"/dashboard/add-task",
                 Component : AddTask
 
+            },
+              {
+                path:"/dashboard/my-tasks",
+                Component : MyTask
             }
         ]
     }

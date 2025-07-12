@@ -30,7 +30,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <FaPlusCircle />  Add New Task
                 </NavLink>
 
-                <NavLink onClick={onClose} to="/my-tasks" className="py-3 w-full gap-2 flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
+                <NavLink onClick={onClose} to="/dashboard/my-tasks" className="py-3 w-full gap-2 flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
                     <FaTasks /> My Tasks
                 </NavLink>
 

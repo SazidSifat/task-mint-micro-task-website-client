@@ -23,8 +23,8 @@ const Header = () => {
 
 
     return (
-        <header className="flex flex-wrap items-center justify-between gap-4 px-4 border-b md:px-20 py-4  border-primary">
-            <div className="font-bold text-primary text-xl hidden md:block">Dashboard</div>
+        <header className="flex flex-wrap items-center justify-between gap-4 px-4 border-b md:px-20 py-4  border-secondary  ">
+            <div className="font-bold text-primary text-2xl hidden lg:block">Dashboard</div>
 
             <div className="flex items-center gap-4 ml-auto">
                 <div className="text-right hidden sm:block">
