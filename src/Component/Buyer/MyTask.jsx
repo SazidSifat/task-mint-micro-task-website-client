@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../Hook/useAuth';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import { Zoom } from 'react-awesome-reveal';
 
 const MyTask = () => {
     const { user } = useAuth()
@@ -19,6 +21,65 @@ const MyTask = () => {
         }
     }, [email]);
 
+
+    const handleDeleteTask = (id) => {
+
+
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:3000/my-tasks/${id}`)
+                    .then(res => {
+                        if (res.data.deletedCount) {
+                            setMyTasks(prev => prev.filter(task => task._id !== id))
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
     return (
         <div className="p-5">
             <h2 className="text-2xl font-bold text-primary mb-6">My Posted Tasks</h2>
@@ -29,7 +90,7 @@ const MyTask = () => {
                         <tr>
                             <th className="text-left">Title</th>
                             <th>Workers Needed</th>
-                            <th>Pay/Worker</th>
+                            <th>Payment per Worker</th>
                             <th>Deadline</th>
                             <th className="text-center">Actions</th>
                         </tr>
@@ -42,16 +103,12 @@ const MyTask = () => {
                                 <td>{task.payable_amount}</td>
                                 <td>{task.completion_date}</td>
                                 <td className="flex gap-2 justify-center">
-                                    <button
-                                        onClick={() => setOpenModal(true)}
-                                        className="btn btn-secondary text-secondary-content btn-sm"
-                                    >
+                                    <button onClick={() => setOpenModal(true)}
+                                        className=" px-4   font-semibold rounded-lg bg-secondary   text-secondary-content btn-sm">
                                         Edit
                                     </button>
-                                    <button
-
-                                        className="btn btn-error btn-sm"
-                                    >
+                                    <button onClick={() => handleDeleteTask(task._id)}
+                                        className="px-4 py-1.5  font-semibold rounded-lg bg-error text-white btn-sm">
                                         Delete
                                     </button>
                                 </td>
@@ -62,40 +119,48 @@ const MyTask = () => {
             </div>
 
 
+
+
+
+
+
+
             {
-                openModal && <div className="fixed inset-0 bg-black/30 bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-base-100 p-6 rounded-xl shadow-xl w-96 space-y-4 border border-base-300">
-                        <h3 className="text-lg font-semibold text-primary">Edit Task</h3>
-                        <input
-                            type="text"
-                            placeholder="Task Title"
+                openModal && <div className="fixed inset-0 bg-black/30  flex items-center justify-center z-50">
+                    <Zoom>
+                        <div className="bg-base-100 p-6 rounded-xl shadow-xl w-lg space-y-4 border border-base-300">
+                            <h3 className="text-xl font-semibold text-primary">Edit Task</h3>
+                            <input
+                                type="text"
+                                placeholder="Task Title"
 
-                            className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Submission Info"
-                            className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
-                        />
-                        <textarea
-                            placeholder="Task Details"
+                                className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Submission Info"
+                                className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
+                            />
+                            <textarea
+                                placeholder="Task Details"
 
 
-                            className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
-                        />
+                                className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
+                            />
 
-                        <div className="flex justify-end gap-2">
-                            <button
-                                className="btn btn-outline btn-secondary"
-                                onClick={() => setOpenModal(false)}
-                            >
-                                Cancel
-                            </button>
-                            <button className="btn btn-primary">
-                                Save
-                            </button>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    className="px-4 py-2  font-semibold rounded-lg border border-secondary text-secondary hover:text-secondary-content hover:bg-secondary"
+                                    onClick={() => setOpenModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button className="px-4 py-2  font-semibold rounded-lg bg-primary text-primary-content hover:bg-primary/80 hover:text-primary-content">
+                                    Save
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </Zoom>
                 </div>
             }
         </div>

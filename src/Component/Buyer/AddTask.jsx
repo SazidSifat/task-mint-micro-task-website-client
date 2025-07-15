@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import useAuth from '../../Hook/useAuth';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import Loading from '../../Shared/Loading';
 
 const AddTask = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -46,6 +47,7 @@ const AddTask = () => {
                     .then(res => {
                         if (res.data.insertedId) {
                             setLoading(false)
+                            axios.patch
                             Swal.fire({
                                 position: "center",
                                 icon: "success",
@@ -66,16 +68,8 @@ const AddTask = () => {
         }
     }
 
-
-
-
-
-
-
-
-
     return (
-        <div className="px-10 mx-auto mt-10  rounded-lg ">
+        <div className="px-10 mx-auto mt-6  rounded-lg ">
             <h2 className="text-2xl font-bold text-primary mb-6">Add New Task</h2>
             <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                 <div>
@@ -177,7 +171,7 @@ const AddTask = () => {
                     type="submit"
                     className="py-3 border-2 bg-primary px-3 rounded-xl w-full text-primary-content font-medium"
                 >
-                    Add Task
+                    {loading ? <span className="loading loading-bars loading-xs"></span> : "Add Task"}
                 </button>
             </form>
         </div>

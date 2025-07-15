@@ -2,9 +2,12 @@ import { Link, NavLink } from "react-router";
 import { IoClose } from "react-icons/io5";
 import { ImCoinDollar } from "react-icons/im";
 import { FaHome, FaPlusCircle, FaTasks, FaCoins, FaHistory } from "react-icons/fa";
+import useAuth from "../../Hook/useAuth";
 
 
-const Sidebar = ({ isOpen, onClose }) => {
+const BuyerSidebar = ({ isOpen, onClose }) => {
+
+    const { user } = useAuth()
     return (
         <aside className={`
             fixed md:relative z-50 h-full bg-primary text-primary-content p-4 w-64
@@ -20,11 +23,11 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="font-bold text-3xl hidden lg:block text-center mt-4">
                     <Link to='/' onClick={onClose}>Task Mint</Link>
                 </div>
-                <div className="divider hidden lg:block"></div>
+                <div className='divider'></div>
 
-                <NavLink onClick={onClose} to="/dashboard/home" className="py-3 w-full  gap-2  flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
+                <Link onClick={onClose} to="/dashboard" className="py-3 w-full  gap-2  flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
                     <FaHome />  Home
-                </NavLink>
+                </Link>
 
                 <NavLink onClick={onClose} to="/dashboard/add-task" className="py-3 w-full  gap-2 flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
                     <FaPlusCircle />  Add New Task
@@ -34,11 +37,11 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <FaTasks /> My Tasks
                 </NavLink>
 
-                <NavLink onClick={onClose} to="/purchase-coin" className="py-3 gap-2 w-full flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
+                <NavLink onClick={onClose} to="/dashboard/purchase-coin" className="py-3 gap-2 w-full flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
                     <FaCoins />  Purchase Coin
                 </NavLink>
 
-                <NavLink onClick={onClose} to="/payment-history" className="py-3  gap-2 w-full flex items-items justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
+                <NavLink onClick={onClose} to={`dashboard/payment-history/${user.email}`} className="py-3  gap-2 w-full flex items-items justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
                     <FaHistory />  Payment History
                 </NavLink>
             </nav>
@@ -46,4 +49,4 @@ const Sidebar = ({ isOpen, onClose }) => {
     );
 };
 
-export default Sidebar;
+export default BuyerSidebar;

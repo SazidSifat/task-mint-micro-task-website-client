@@ -8,8 +8,9 @@ import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import useAuth from "../Hook/useAuth";
 import Loading from "../Shared/Loading";
 import BuyerSidebar from "../Component/DashboardComponent/BuyerSidebar";
+import AdminSidebar from "../Component/DashboardComponent/AdminSidebar";
 
-const BuyerDashboard = () => {
+const AdminDashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const { loading } = useAuth()
@@ -31,7 +32,7 @@ const BuyerDashboard = () => {
 
             <div className="flex flex-1 overflow-hidden">
                 {/* Sidebar: hidden on mobile */}
-                <BuyerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+                <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
                 {/* Main content */}
                 <main className="flex-1 flex flex-col justify-between overflow-hidden">
@@ -46,4 +47,4 @@ const BuyerDashboard = () => {
     );
 };
 
-export default BuyerDashboard;
+export default AdminDashboard;
