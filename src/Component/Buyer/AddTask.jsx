@@ -9,41 +9,43 @@ const AddTask = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { user, loading, setLoading } = useAuth()
     const [userDetails, setUserDetails] = useState({})
-    const email = user?.email
+    const buyerEmail = user?.email
+    const buyerName = user?.displayName
 
     useEffect(() => {
-        if (email) {
+        if (buyerEmail) {
             axios
-                .get(`http://localhost:3000/users/${encodeURIComponent(email)}`)
+                .get(`http://localhost:3000/users/${encodeURIComponent(buyerEmail)}`)
                 .then(res => setUserDetails(res.data))
                 .catch(err => console.error(err));
         }
-    }, [email]);
+    }, [buyerEmail]);
 
 
     const onSubmit = async (data) => {
         const totalPayable = parseInt(data.required_workers) * parseInt(data.payable_amount)
         const task_image = data.task_image[0]
         console.log(task_image)
-
-
         setLoading(true)
+
+
         const imageFormData = new FormData();
         imageFormData.append('image', task_image);
         const response = await axios.post(
             `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgBBApi}`, imageFormData
         );
-        console.log(response)
+        // console.log(response)
         const imageUrl = response?.data?.data?.display_url;
-        console.log(imageUrl)
-        const taskDetails = { ...data, task_image: imageUrl, totalPayable, email }
+        const taskDetails = { ...data, task_image: imageUrl, totalPayable, buyerEmail: buyerEmail, buyerName: buyerName }
 
-        if (taskDetails && email) {
+        console.log(taskDetails)
+
+        if (taskDetails && buyerEmail) {
             if (userDetails.coin < totalPayable) {
                 alert("Insufficient amount ,Please buy coin")
 
             } else {
-                axios.post("http://localhost:3000/add-task", taskDetails)
+                axios.post("http://localhost:3000/add-task", { task: taskDetails })
                     .then(res => {
                         if (res.data.insertedId) {
                             setLoading(false)

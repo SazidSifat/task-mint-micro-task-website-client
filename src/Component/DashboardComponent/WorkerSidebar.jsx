@@ -2,12 +2,12 @@ import { Link, NavLink } from "react-router";
 import { IoClose } from "react-icons/io5";
 import { ImCoinDollar } from "react-icons/im";
 import { FaHome, FaPlusCircle, FaTasks, FaCoins, FaHistory } from "react-icons/fa";
-import useAuth from "../../Hook/useAuth";
+// import useAuth from "../../Hook/useAuth";
 
 
 const WorkerSidebar = ({ isOpen, onClose }) => {
 
-    const { user } = useAuth()
+    // const { user } = useAuth()
     return (
         <aside className={`
             fixed md:relative z-50 h-full bg-primary text-primary-content p-4 w-64

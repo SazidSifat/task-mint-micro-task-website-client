@@ -17,6 +17,12 @@ import Dashboard from "../Component/Dashboard";
 import DashboardHome from "../Component/DashboardHome";
 import ManageUsers from "../Component/Admin/ManageUsers";
 import ManageTasks from "../Component/Admin/ManageTasks";
+import TaskList from "../Component/Worker/TaskList";
+import TaskDetails from "../Component/Worker/TaskDetails";
+import MySubmissionDetails from "../Component/Worker/MySubmissionDetails";
+import Withdrawals from "../Component/Worker/Withdrawals";
+
+
 
 
 const router = createBrowserRouter([
@@ -77,7 +83,26 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/manage-tasks",
                 Component: ManageTasks
+            },
+            {
+                path: '/dashboard/task-list',
+                Component: TaskList
+            },
+            {
+
+                path: '/dashboard/task-list/:id',
+                Component: TaskDetails
+            },
+            {
+                path: '/dashboard/my-submission',
+                Component: MySubmissionDetails
+
             }
+            , {
+                path: '/dashboard/withdraw',
+                Component: Withdrawals
+            }
+
         ]
     }
 ])

@@ -1,42 +1,32 @@
-import React, { useState } from "react";
-
-const stats = {
-    totalBuyers: 12,
-    totalWorkers: 34,
-    totalCoins: 2350,
-    totalPayments: 1125,
-};
-
-const dummyWithdrawals = [
-    {
-        _id: "w1",
-        worker_name: "Sazid Ahamed",
-        worker_email: "s@s.com",
-        withdrawal_coin: 200,
-        withdrawal_amount: 10,
-        payment_system: "Bkash",
-        account_number: "017xxxxxxxx",
-        withdraw_date: "2025-07-13T14:30:00Z",
-    },
-    {
-        _id: "w2",
-        worker_name: "Rakib Hasan",
-        worker_email: "r@r.com",
-        withdrawal_coin: 400,
-        withdrawal_amount: 20,
-        payment_system: "Nagad",
-        account_number: "018xxxxxxxx",
-        withdraw_date: "2025-07-14T11:00:00Z",
-    },
-];
+import axios from "axios";
+import React, { use, useEffect, useState } from "react";
 
 const AdminHome = () => {
-    const [withdrawals, setWithdrawals] = useState(dummyWithdrawals);
+    const [withdrawals, setWithdrawals] = useState([]);
+    const [user, setUser] = useState([]);
+    const [buyer, setBuyer] = useState([]);
+    const [worker, setWorker] = useState([]);
+    let totalCoin = 0
 
     const handleApprove = (id) => {
         setWithdrawals(prev => prev.filter(w => w._id !== id));
         alert(`Marked ${id} as paid (simulate backend call here)`);
     };
+
+
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/users')
+            .then(res => {
+                setUser(res.data)
+                const allBuyer = res.data.filter(buyer => buyer.role === 'buyer')
+                setBuyer(allBuyer)
+                const allWorker = res.data.filter(worker => worker.role === 'worker')
+                setWorker(allWorker)
+            })
+    }, [])
+
+    user.forEach(u => totalCoin += parseInt(u.coin))
 
     return (
         <div className=" mx-auto p-6 space-y-10 mt-10">
@@ -44,20 +34,20 @@ const AdminHome = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className=" rounded-xl bg-base-200 flex gap-3 flex-col items-center justify-center shadow py-10 border border-primary/50">
                     <p className=" text-base-content text-xl font-bold">Total Workers</p>
-                    <h3 className="text-5xl font-bold  text-[#10b981]">{stats.totalWorkers}</h3>
+                    <h3 className="text-5xl font-bold  text-[#10b981]">{worker.length}</h3>
                 </div>
                 <div className=" rounded-xl bg-base-200 flex gap-3 flex-col items-center justify-center shadow py-10 border border-primary/50">
                     <p className="text-base-content text-xl font-bold">Total Buyer</p>
-                    <h3 className="text-5xl font-bold  text-[#3b82f6]">{stats.totalWorkers}</h3>
+                    <h3 className="text-5xl font-bold  text-[#3b82f6]">{buyer.length}</h3>
                 </div>
                 <div className=" rounded-xl bg-base-200 flex gap-3 flex-col items-center justify-center shadow py-10 border border-primary/50">
                     <p className="text-base-content text-xl font-bold">Total Coin</p>
-                    <h3 className="text-5xl font-bold  text-[#f59e0b]">{stats.totalWorkers}</h3>
+                    <h3 className="text-5xl font-bold  text-[#f59e0b]">{totalCoin}</h3>
                 </div>
-                <div className=" rounded-xl bg-base-200 flex  gap-3 flex-col items-center justify-center shadow py-10 border border-primary/50">
+                {/* <div className=" rounded-xl bg-base-200 flex  gap-3 flex-col items-center justify-center shadow py-10 border border-primary/50">
                     <p className="text-base-content text-xl font-bold">Total Payment</p>
                     <h3 className="text-5xl font-bold  text-[#ef4444]">{stats.totalWorkers}</h3>
-                </div>
+                </div> */}
 
             </div>
 
