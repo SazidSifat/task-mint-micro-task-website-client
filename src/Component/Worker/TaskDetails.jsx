@@ -42,11 +42,6 @@ const TaskDetails = () => {
         e.preventDefault();
 
         const submissionDetails = e.target.submission_Details.value
-
-        console.log(submissionDetails)
-
-
-
         const submittedTask = {
             task_id: _id,
             task_title,
@@ -62,9 +57,25 @@ const TaskDetails = () => {
         if (submissionDetails !== "") {
             axios.post('http://localhost:3000/submitted-task', { submittedTask: submittedTask })
                 .then(res => {
-                    console.log(res.data)
+                    if (res.data.insertedId) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Task Submitted Successfully",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Something went wrong",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                })
         }
 
     };

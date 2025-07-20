@@ -6,14 +6,9 @@ const AdminHome = () => {
     const [user, setUser] = useState([]);
     const [buyer, setBuyer] = useState([]);
     const [worker, setWorker] = useState([]);
+    const [approved, setApproved] = useState([]);
     let totalCoin = 0
-
-    const handleApprove = (id) => {
-        setWithdrawals(prev => prev.filter(w => w._id !== id));
-        alert(`Marked ${id} as paid (simulate backend call here)`);
-    };
-
-
+    let totalPayment = 0
 
     useEffect(() => {
         axios.get('http://localhost:3000/users')
@@ -27,6 +22,29 @@ const AdminHome = () => {
     }, [])
 
     user.forEach(u => totalCoin += parseInt(u.coin))
+    approved.forEach(w => totalPayment += Number(w.withdrawal_amount))
+
+
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/withdraw-request')
+            .then(res => {
+                const newW = res.data.filter(w => w.status !== "approved")
+                const approvedW = res.data.filter(w => w.status === "approved")
+                setWithdrawals(newW)
+                setApproved(approvedW)
+            })
+    }, [])
+
+    const handleApprove = (id) => {
+        axios.patch(`http://localhost:3000/approveWithdraw/${id}`)
+            .then(({ data }) => {
+                if (data.modifiedCount) {
+                    setWithdrawals(prev => prev.filter(w => w._id !== id));
+                }
+            })
+    };
+
 
     return (
         <div className=" mx-auto p-6 space-y-10 mt-10">
@@ -44,10 +62,10 @@ const AdminHome = () => {
                     <p className="text-base-content text-xl font-bold">Total Coin</p>
                     <h3 className="text-5xl font-bold  text-[#f59e0b]">{totalCoin}</h3>
                 </div>
-                {/* <div className=" rounded-xl bg-base-200 flex  gap-3 flex-col items-center justify-center shadow py-10 border border-primary/50">
+                <div className=" rounded-xl bg-base-200 flex  gap-3 flex-col items-center justify-center shadow py-10 border border-primary/50">
                     <p className="text-base-content text-xl font-bold">Total Payment</p>
-                    <h3 className="text-5xl font-bold  text-[#ef4444]">{stats.totalWorkers}</h3>
-                </div> */}
+                    <h3 className="text-5xl font-bold  text-[#ef4444]">${totalPayment}</h3>
+                </div>
 
             </div>
 
@@ -64,6 +82,7 @@ const AdminHome = () => {
                                 <th className="px-4 py-2">Amount ($)</th>
                                 <th className="px-4 py-2">Payment System</th>
                                 <th className="px-4 py-2">Account</th>
+                                <th className="px-4 py-2">Status</th>
                                 <th className="px-4 py-2">Date</th>
                                 <th className="px-4 py-2">Action</th>
                             </tr>
@@ -77,6 +96,7 @@ const AdminHome = () => {
                                     <td className="px-4 py-2 text-green-600 font-bold">${w.withdrawal_amount}</td>
                                     <td className="px-4 py-2">{w.payment_system}</td>
                                     <td className="px-4 py-2">{w.account_number}</td>
+                                    <td className="px-4 py-2">{w.status}</td>
                                     <td className="px-4 py-2 text-base-content/50 ">
                                         {new Date(w.withdraw_date).toLocaleString()}
                                     </td>

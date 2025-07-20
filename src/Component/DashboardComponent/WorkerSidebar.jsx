@@ -29,7 +29,12 @@ const WorkerSidebar = ({ isOpen, onClose }) => {
                     <FaHome />  Home
                 </Link>
 
-                <NavLink onClick={onClose} to="/dashboard/task-list" className="py-3 w-full  gap-2 flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right ">
+                <NavLink onClick={onClose} to="/dashboard/task-list" className={({ isActive }) =>
+                    `py-3 w-full gap-2 flex items-center justify-center rounded-2xl text-right ${isActive
+                        ? "bg-secondary text-secondary-content"
+                        : "hover:bg-secondary hover:text-secondary-content"
+                    }`
+                }>
                     <FaPlusCircle />  Task List
                 </NavLink>
 

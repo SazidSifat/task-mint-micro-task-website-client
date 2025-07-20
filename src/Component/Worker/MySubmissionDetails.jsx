@@ -21,35 +21,32 @@ const MySubmissionDetails = () => {
         }
     }, [email])
 
+    console.log(tasks)
+
     return (
         <div className="overflow-x-auto rounded-xl shadow-lg border border-base-300">
             <table className="table table-zebra w-full">
                 <thead className="bg-primary text-primary-content text-center">
                     <tr>
                         <th className="">Title</th>
-                        <th>Workers Needed</th>
-                        <th>Payment per Worker</th>
-                        <th>Deadline</th>
-                        <th className="text-center">Actions</th>
+                        <th>Buyer Name</th>
+                        <th>Payable</th>
+                        <th>Submitted Date</th>
+                        <th>Status</th>
+
                     </tr>
                 </thead>
                 <tbody className='text-center'>
                     {tasks.map((task) => (
                         <tr key={task._id}>
-                            <td>{task.task_title}</td>
-                            <td>{task.required_workers}</td>
+                            <td className='font-bold'>{task.task_title}</td>
+                            <td>{task.buyerName}</td>
                             <td>{task.payable_amount}</td>
-                            <td>{task.completion_date}</td>
-                            <td className="flex gap-2 justify-center">
-                                <button
-                                    className=" px-4   font-semibold rounded-lg bg-secondary   text-secondary-content btn-sm">
-                                    Edit
-                                </button>
-                                <button
-                                    className="px-4 py-1.5  font-semibold rounded-lg bg-error text-white btn-sm">
-                                    Delete
-                                </button>
-                            </td>
+                            <td className='text-base-content/70'>{new Date(task.current_Date).toLocaleString("en-US", {
+                                timeZone: "Asia/Dhaka",
+                            })}</td>
+                            <td><p className={`font-bold capitalize ${task.status === "pending" ? "text-secondary" : "text-primary"}`}>{task.status}</p></td>
+
                         </tr>
                     ))}
                 </tbody>
