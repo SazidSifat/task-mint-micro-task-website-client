@@ -8,8 +8,13 @@ const MyTask = () => {
     const { user } = useAuth()
     const email = user?.email
     const [myTasks, setMyTasks] = useState([]);
-    const [openModal, setOpenModal] = useState(false)
+    const [openModal, setOpenModal] = useState(null)
 
+
+    // 
+    const [title, setTitle] = useState('')
+    const [desc, setDesc] = useState('')
+    const [info, setInfo] = useState('')
 
 
     useEffect(() => {
@@ -58,26 +63,33 @@ const MyTask = () => {
         });
 
 
-
-
-
-
-
-
-
-
-
-
     }
 
 
+    const updateMyTask = (id) => {
+
+        const updatedData = {
+            task_title: title,
+            task_detail: desc,
+            submission_info: info
+        }
 
 
+        axios.put(`http://localhost:3000/update-my-task/${id}`, updatedData)
+            .then(({ data }) => {
+               if(data.modifiedCount === 1){
+                Swal.fire({
+                    position:"center",
+                    timer:1500,
+                    title: "Updated Successfully",
+                    showCancelButton:false,
+                    icon: "success",
+                    showConfirmButton:false
+                })
 
-
-
-
-
+               }
+            })
+    }
 
 
     return (
@@ -86,16 +98,16 @@ const MyTask = () => {
 
             <div className="overflow-x-auto rounded-xl shadow-lg border border-base-300">
                 <table className="table table-zebra w-full">
-                    <thead className="bg-primary text-primary-content">
+                    <thead className="bg-primary text-center text-primary-content">
                         <tr>
-                            <th className="text-left">Title</th>
+                            <th className="">Title</th>
                             <th>Workers Needed</th>
                             <th>Payment per Worker</th>
                             <th>Deadline</th>
                             <th className="text-center">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className='text-center'>
                         {myTasks.map((task) => (
                             <tr key={task._id}>
                                 <td>{task.task_title}</td>
@@ -103,7 +115,7 @@ const MyTask = () => {
                                 <td>{task.payable_amount}</td>
                                 <td>{task.completion_date}</td>
                                 <td className="flex gap-2 justify-center">
-                                    <button onClick={() => setOpenModal(true)}
+                                    <button onClick={() => setOpenModal(task)}
                                         className=" px-4   font-semibold rounded-lg bg-secondary   text-secondary-content btn-sm">
                                         Edit
                                     </button>
@@ -120,45 +132,49 @@ const MyTask = () => {
 
 
 
-
-
-
-
-
             {
                 openModal && <div className="fixed inset-0 bg-black/30  flex items-center justify-center z-50">
                     <Zoom>
                         <div className="bg-base-100 p-6 rounded-xl shadow-xl w-lg space-y-4 border border-base-300">
                             <h3 className="text-xl font-semibold text-primary">Edit Task</h3>
-                            <input
-                                type="text"
-                                placeholder="Task Title"
 
+                            <input
+                                onChange={(e) => setTitle(e.target.value)}
+                                type="text"
+                                defaultValue={openModal.task_title}
+                                placeholder="Task Title"
                                 className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
                             />
                             <input
                                 type="text"
+                                onChange={(e) => setInfo(e.target.value)}
+                                defaultValue={openModal.submission_info}
                                 placeholder="Submission Info"
                                 className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
                             />
                             <textarea
+                                onChange={(e) => setDesc(e.target.value)}
+                                defaultValue={openModal.task_detail}
                                 placeholder="Task Details"
-
-
                                 className="py-3 border-2 border-primary/50 px-3 rounded-xl focus:outline-secondary w-full"
                             />
-
                             <div className="flex justify-end gap-2">
                                 <button
                                     className="px-4 py-2  font-semibold rounded-lg border border-secondary text-secondary hover:text-secondary-content hover:bg-secondary"
-                                    onClick={() => setOpenModal(false)}
+                                    onClick={() => {
+                                        setOpenModal(false)
+                                        setTitle('')
+                                        setInfo('')
+                                        setDesc('')
+                                    }}
                                 >
                                     Cancel
                                 </button>
-                                <button className="px-4 py-2  font-semibold rounded-lg bg-primary text-primary-content hover:bg-primary/80 hover:text-primary-content">
+                                <button onClick={() => updateMyTask(openModal._id)} className="px-4 py-2  font-semibold rounded-lg bg-primary text-primary-content hover:bg-primary/80 hover:text-primary-content">
                                     Save
                                 </button>
                             </div>
+
                         </div>
                     </Zoom>
                 </div>
