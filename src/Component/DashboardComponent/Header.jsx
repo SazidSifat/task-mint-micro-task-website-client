@@ -3,13 +3,17 @@ import { IoNotifications } from "react-icons/io5";
 import useAuth from "../../Hook/useAuth";
 import axios from "axios";
 import { motion } from "motion/react"
+import Notification from "./Notification";
+import { Fade, Zoom } from "react-awesome-reveal";
 
 const Header = () => {
 
-
+    const [notification, setNotification] = useState([])
     const { user } = useAuth()
     const [userDetails, setUserDetails] = useState({})
     const email = user?.email
+
+    const [isOpen, setIsOpen] = useState(false)
 
 
     useEffect(() => {
@@ -20,6 +24,20 @@ const Header = () => {
                 .catch(err => console.error(err));
         }
     }, [email]);
+
+
+
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/notification/${email}`)
+            .then((res) => {
+                setNotification(res.data)
+                console.log(res.data)
+
+            })
+            .catch(err => console.log(err))
+    }, [email])
+
 
     const role = userDetails?.role?.charAt(0).toUpperCase() + userDetails?.role?.slice(1).toLowerCase()
 
@@ -38,8 +56,26 @@ const Header = () => {
                     alt="User"
                     className="w-10 h-10 rounded-full"
                 />
-                <motion.button whileHover={{ scale: 1.2 }} className="text-primary cursor-pointer"><IoNotifications size={24} /></motion.button>
+                <motion.button onClick={() => setIsOpen(!isOpen)} whileHover={{ scale: 1.2 }} className="text-primary cursor-pointer"><IoNotifications size={24} /></motion.button>
             </div>
+
+
+            {/* Modal */}
+            {
+                isOpen && (<div className="absolute bg-base-300/80 flex flex-col gap-3 items-center shadow-lg backdrop-blur w-sm text-secondary p-6  overflow-y-scroll  rounded-2xl h-[70vh]  right-16 z-50 top-20 ">
+
+
+                    <Fade>
+
+                        {
+                            notification.map(n => <Notification key={n.message} n={n} />)
+                        }
+                    </Fade>
+
+
+
+                </div>)
+            }
         </header>
 
     );

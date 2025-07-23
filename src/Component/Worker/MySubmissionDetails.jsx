@@ -45,13 +45,25 @@ const MySubmissionDetails = () => {
                             <td className='text-base-content/70'>{new Date(task.current_Date).toLocaleString("en-US", {
                                 timeZone: "Asia/Dhaka",
                             })}</td>
-                            <td><p className={`font-bold capitalize ${task.status === "pending" ? "text-secondary" : "text-primary"}`}>{task.status}</p></td>
+                            <td>
+                                <p
+                                    className={`font-bold capitalize ${task.status === "pending"
+                                            ? "text-secondary"
+                                            : task.status === "rejected"
+                                                ? "text-error"
+                                                : "text-primary"
+                                        }`}
+                                >
+                                    {task.status}
+                                </p>
+                            </td>
+
 
                         </tr>
                     ))}
                 </tbody>
             </table>
-        </div>
+        </div >
     );
 };
 

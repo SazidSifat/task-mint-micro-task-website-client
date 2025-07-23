@@ -40,6 +40,7 @@ const ManageUsers = () => {
                 axios.delete(`http://localhost:3000/users/${id}`)
                     .then(res => {
                         if (res.data.deletedCount) {
+
                             const afterDelete = users.filter(user => user._id !== id)
                             setUsers(afterDelete)
 
@@ -76,7 +77,7 @@ const ManageUsers = () => {
                                 <td><img src={user.imageUrl} alt="" className='w-10 rounded' /></td>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
-                                <td>{user.role}</td>
+                                <td className='capitalize'>{user.role}</td>
                                 <td>{user.coin}</td>
                                 <td className="flex items-center gap-3 justify-center">
                                     <button onClick={() => handleDelete(user._id)}

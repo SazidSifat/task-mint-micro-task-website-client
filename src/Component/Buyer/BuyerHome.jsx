@@ -37,7 +37,7 @@ const BuyerHome = () => {
 
 
 
-    console.log(selectedSubmission)
+    console.log(pendingTaskSubmitted)
 
 
 
