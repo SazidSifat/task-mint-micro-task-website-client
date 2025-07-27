@@ -5,11 +5,12 @@ import { useForm } from 'react-hook-form';
 import useAuth from '../../Hook/useAuth';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Login = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
-    const { signInWithEmailAndPass,googleSignIn } = useAuth()
+    const { signInWithEmailAndPass, googleSignIn } = useAuth()
 
     const navigate = useNavigate()
     const { state } = useLocation()
@@ -21,7 +22,7 @@ const Login = () => {
             .then(res => {
                 console.log(res)
                 toast.success("Login Successful")
-                navigate(state ? state : "/")
+                navigate(state ? state : '/dashboard')
             })
             .catch(err => {
                 if (err.code === "auth/invalid-credential") {
@@ -33,15 +34,28 @@ const Login = () => {
 
 
 
-    const handleGoogleLogin = ()=>{
+    const handleGoogleLogin = () => {
         googleSignIn()
-        .then(res=>{
-            console.log( res.user )
+            .then(res => {
+                const user = res.user
+                // console.log(user)
 
-            
-        })
+                const userInfo = {
+                    name: user.displayName,
+                    email: user.email,
+                    role: 'worker',
+                    coin: 10,
+                    imageUrl: user.photoURL,
+                }
 
-
+                axios.post('http://localhost:3000/users', userInfo)
+                    .then(res => {
+                        console.log(res.data)
+                    })
+                toast.success("Registration Successful")
+                navigate(state ? state : '/dashboard')
+            })
+            .catch(err => console.log(err))
     }
 
 

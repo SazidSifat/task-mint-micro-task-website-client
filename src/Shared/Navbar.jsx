@@ -56,7 +56,7 @@ const Navbar = () => {
                         <FaBars size={28} className='cursor-pointer hover:text-secondary' onClick={() => setIsOpen(!isOpen)} />
                     </div>
                 </div>
-                <Link className='py-3 px-8 hidden lg:block  bg-secondary text-secondary-content rounded-lg font-bold hover:bg-secondary/70'>Join as Developer</Link>
+                <Link target='_blank' to='https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-SazidSifat' className='py-3 px-8 hidden lg:block  bg-secondary text-secondary-content rounded-lg font-bold hover:bg-secondary/70'>Join as Developer</Link>
             </div>
 
 
@@ -81,7 +81,7 @@ const Navbar = () => {
                         }
 
                     </div>
-                    <Link className='py-3 px-8  lg:block  bg-secondary text-secondary-content rounded-lg font-bold hover:bg-secondary/70'>Join as Developer</Link>
+                    <Link target='_blank' to='https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-SazidSifat' className='py-3 px-8  lg:block  bg-secondary text-secondary-content rounded-lg font-bold hover:bg-secondary/70'>Join as Developer</Link>
                 </div>
 
             </div>

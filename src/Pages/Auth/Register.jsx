@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const Register = () => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm()
+    const { register, handleSubmit, formState: { errors } } = useForm({ criteriaMode: "all" });
     const { registerWithEmailPass } = useAuth()
     const navigate = useNavigate()
     const { state } = useLocation()
@@ -43,7 +43,6 @@ const Register = () => {
             role,
             coin,
             imageUrl
-
         }
 
 
@@ -61,9 +60,6 @@ const Register = () => {
                 console.log(err)
                 toast.error("Something Went Wrong")
             })
-
-
-
     }
 
 
@@ -92,27 +88,48 @@ const Register = () => {
 
                         <input
                             {...register("email", { required: "Email Field required" })}
-                            type="text"
+                            type="email"
                             placeholder='name@example.com'
                             className='w-full p-3 rounded-lg border border-primary  ' />
                         {errors.email?.type === 'required' && <p className='text-sm text-error pl-2'>{errors.email.message}</p>}
 
 
-
-                        <input {...register("password", { required: "Password Field required" })}
+                        {/* PASSWORD */}
+                        <input
+                            {...register("password", {
+                                required: "Password is required",
+                                minLength: {
+                                    value: 8,
+                                    message: "Password must be at least 8 characters",
+                                },
+                                pattern: {
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
+                                    message:
+                                        "Password must include uppercase, lowercase, number, and special character",
+                                },
+                            })}
                             type="password"
-                            placeholder='**********  '
-                            className='w-full p-3 rounded-lg border border-primary' />
-                        {errors.password?.type === 'required' && <p className='text-sm text-error pl-2' >{errors.password.message}</p>}
+                            placeholder="********"
+                            className="w-full p-3 rounded-lg border border-primary"
+                        />
+
+                        {errors.password && (
+                            <p className="text-sm text-error pl-2">
+                                {errors.password.message}
+                            </p>
+                        )}
 
 
+
+
+                        {/* IMAGE */}
                         <input accept='image/*' {...register("image", { required: "Upload a Image" })}
                             type="file"
                             className='w-full p-3 rounded-lg border border-primary' />
                         {errors.image?.type === 'required' && <p className='text-sm text-error pl-2' >{errors.image.message}</p>}
 
 
-
+                        {/* OPTION */}
                         <select {...register("role", { required: "Select a Role" })}
                             className='w-full p-3 rounded-lg border border-primary' >
                             <option className='' value="worker">Worker</option>

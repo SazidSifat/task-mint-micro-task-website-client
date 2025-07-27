@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoNotifications } from "react-icons/io5";
 import useAuth from "../../Hook/useAuth";
 import axios from "axios";
@@ -12,8 +12,8 @@ const Header = () => {
     const { user } = useAuth()
     const [userDetails, setUserDetails] = useState({})
     const email = user?.email
-
     const [isOpen, setIsOpen] = useState(false)
+    const popupRef = useRef();
 
 
     useEffect(() => {
@@ -25,7 +25,20 @@ const Header = () => {
         }
     }, [email]);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
 
+
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
 
     useEffect(() => {
@@ -38,9 +51,7 @@ const Header = () => {
             .catch(err => console.log(err))
     }, [email])
 
-
     const role = userDetails?.role?.charAt(0).toUpperCase() + userDetails?.role?.slice(1).toLowerCase()
-
 
     return (
         <header className="flex flex-wrap items-center justify-between gap-4 px-4 border-b md:px-20 py-4  border-secondary  ">
@@ -60,20 +71,14 @@ const Header = () => {
             </div>
 
 
-            {/* Modal */}
             {
                 isOpen && (<div className="absolute bg-base-300/80 flex flex-col gap-3 items-center shadow-lg backdrop-blur w-sm text-secondary p-6  overflow-y-scroll  rounded-2xl h-[70vh]  right-16 z-50 top-20 ">
-
-
                     <Fade>
-
                         {
-                            notification.map(n => <Notification key={n.message} n={n} />)
+                            notification.length === 0 ? <p className="text-2xl text-base-content">No Notification</p> :
+                                notification.map(n => <Notification key={n.message} n={n} popupRef={popupRef} />)
                         }
                     </Fade>
-
-
-
                 </div>)
             }
         </header>

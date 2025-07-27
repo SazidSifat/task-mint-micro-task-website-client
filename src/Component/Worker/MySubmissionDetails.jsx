@@ -24,7 +24,7 @@ const MySubmissionDetails = () => {
     console.log(tasks)
 
     return (
-        <div className="overflow-x-auto rounded-xl shadow-lg border border-base-300">
+        <div className="overflow-x-auto rounded-xl shadow-lg border mt-10 border-base-300">
             <table className="table table-zebra w-full">
                 <thead className="bg-primary text-primary-content text-center">
                     <tr>
@@ -33,7 +33,6 @@ const MySubmissionDetails = () => {
                         <th>Payable</th>
                         <th>Submitted Date</th>
                         <th>Status</th>
-
                     </tr>
                 </thead>
                 <tbody className='text-center'>

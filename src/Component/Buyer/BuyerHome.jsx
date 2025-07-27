@@ -17,7 +17,6 @@ const BuyerHome = () => {
         if (email) {
             axios.get(`http://localhost:3000/my-tasks/${encodeURIComponent(email)}`)
                 .then(res => {
-
                     setMyTask(res.data)
                 })
                 .catch(err => console.error(err));

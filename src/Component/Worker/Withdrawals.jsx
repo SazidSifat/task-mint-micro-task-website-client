@@ -56,11 +56,6 @@ const Withdrawals = () => {
                 }
             }
             )
-
-
-
-
-
     };
 
     return (
@@ -84,6 +79,7 @@ const Withdrawals = () => {
                             type="number"
                             max={currentUser.coin}
                             placeholder="00"
+                            min={200}
                             required
                             onChange={(e) => {
                                 setWithdrawCoin(Number(e.target.value))

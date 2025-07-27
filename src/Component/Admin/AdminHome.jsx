@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { use, useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const AdminHome = () => {
     const [withdrawals, setWithdrawals] = useState([]);
@@ -39,8 +40,15 @@ const AdminHome = () => {
     const handleApprove = (id) => {
         axios.patch(`http://localhost:3000/approveWithdraw/${id}`)
             .then(({ data }) => {
-                if (data.modifiedCount) {
+                console.log( data )
+                if (data.modifiedCount ) {
                     setWithdrawals(prev => prev.filter(w => w._id !== id));
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 }
             })
     };

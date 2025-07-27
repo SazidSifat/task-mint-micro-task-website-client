@@ -94,7 +94,7 @@ const TaskDetails = () => {
             <h2 className="text-3xl font-bold text-primary">Task Details</h2>
 
             <div className=" shadow-lg rounded-xl border border-primary/50 flex flex-col-reverse lg:flex-row-reverse items-center gap-10 p-10">
-                <div className="space-y-3">
+                <div  className="space-y-3 flex-1">
                     <div>
                         <h3 className="text-2xl font-semibold text-[#2e3d39]">{task.task_title}</h3>
                         <p><strong>Buyer:</strong> {task.buyerName} ({task.buyerEmail})</p>
@@ -114,7 +114,7 @@ const TaskDetails = () => {
                         <img
                             src={task.task_image}
                             alt="Task"
-                            className="w-full rounded"
+                            className=" rounded"
                         />
                     )}
                 </div>
