@@ -21,7 +21,7 @@ const TaskDetails = () => {
     }, [id, setLoading]);
 
 
-    const { buyerEmail, buyerName,  payable_amount,  task_title, _id } = task
+    const { buyerEmail, buyerName, payable_amount, task_title, _id } = task
 
 
     const handleSubmit = async (e) => {
@@ -42,7 +42,11 @@ const TaskDetails = () => {
         }
 
         if (submissionDetails !== "") {
-            axios.post('http://localhost:3000/submitted-task', { submittedTask: submittedTask })
+            axios.post('http://localhost:3000/submitted-task', { submittedTask: submittedTask }, {
+                headers: {
+                    authorization: `Bearer ${user?.accessToken}`
+                }
+            })
                 .then(res => {
                     if (res.data.insertedId) {
                         Swal.fire({
@@ -81,7 +85,7 @@ const TaskDetails = () => {
             <h2 className="text-3xl font-bold text-primary">Task Details</h2>
 
             <div className=" shadow-lg rounded-xl border border-primary/50 flex flex-col-reverse lg:flex-row-reverse items-center gap-10 p-10">
-                <div  className="space-y-3 flex-1">
+                <div className="space-y-3 flex-1">
                     <div>
                         <h3 className="text-2xl font-semibold text-[#2e3d39]">{task.task_title}</h3>
                         <p><strong>Buyer:</strong> {task.buyerName} ({task.buyerEmail})</p>
