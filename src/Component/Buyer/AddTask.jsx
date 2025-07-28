@@ -41,7 +41,11 @@ const AddTask = () => {
                 alert("Insufficient amount ,Please buy coin")
 
             } else {
-                axios.post("http://localhost:3000/add-task", { task: taskDetails })
+                axios.post("http://localhost:3000/add-task", { task: taskDetails }, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
+                })
                     .then(res => {
                         if (res.data.insertedId) {
                             setLoading(false)
@@ -55,7 +59,7 @@ const AddTask = () => {
                             )
                         }
                     })
-                    .catch(err => {
+                    .catch(() => {
                         setLoading(false)
                         Swal.fire({
                             position: "center",

@@ -8,7 +8,7 @@ import Loading from "../../Shared/Loading";
 const TaskDetails = () => {
     const { id } = useParams();
 
-    const { user, setLoading, loading } = useAuth();
+    const { user, setLoading } = useAuth();
     const { email, displayName } = user
 
     const [task, setTask] = useState([]);
@@ -54,7 +54,7 @@ const TaskDetails = () => {
                         })
                     }
                 })
-                .catch(err => {
+                .catch(() => {
                     Swal.fire({
                         position: "center",
                         icon: "error",
