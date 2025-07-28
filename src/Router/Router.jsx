@@ -53,51 +53,51 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard/add-task",
-                Component: AddTask
+                element: <PrivateRoute><AddTask /></PrivateRoute>
 
             },
             {
                 path: "/dashboard/my-tasks",
-                Component: MyTask
+                element: <PrivateRoute><MyTask /></PrivateRoute>
             },
             {
                 path: "/dashboard/purchase-coin",
-                Component: PurchaseCoin
+                element: <PrivateRoute><PurchaseCoin /></PrivateRoute>
 
             },
             {
                 path: "/dashboard/payment/:id",
-                Component: Payment
+                element: <PrivateRoute><Payment /></PrivateRoute>
             },
             {
                 path: 'dashboard/payment-history/:email',
-                Component: PaymentHistory,
+                element: <PrivateRoute><PaymentHistory /></PrivateRoute>,
             },
             {
                 path: "/dashboard/manage-users",
-                Component: ManageUsers
+                element: <PrivateRoute><ManageUsers /></PrivateRoute>
             },
             {
                 path: "/dashboard/manage-tasks",
-                Component: ManageTasks
+                element: <PrivateRoute><ManageTasks /></PrivateRoute>
             },
             {
                 path: '/dashboard/task-list',
-                Component: TaskList
+                element: <PrivateRoute><TaskList /></PrivateRoute>
             },
             {
 
                 path: '/dashboard/task-list/:id',
-                Component: TaskDetails
+                element: <PrivateRoute><TaskDetails /></PrivateRoute>
             },
             {
                 path: '/dashboard/my-submission',
-                Component: MySubmissionDetails
+                element: <PrivateRoute><MySubmissionDetails /></PrivateRoute>
 
             }
             , {
                 path: '/dashboard/withdraw',
-                Component: Withdrawals
+                element: <PrivateRoute><Withdrawals /></PrivateRoute>
             }
 
         ]
