@@ -16,11 +16,15 @@ const Navbar = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/${user?.email}`)
+        axios.get(`http://localhost:3000/users/${user?.email}`, {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
             .then(res => {
                 setDbUser(res.data)
             })
-    }, [user?.email])
+    }, [user?.email,user?.accessToken])
 
 
 

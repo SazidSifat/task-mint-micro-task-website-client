@@ -18,13 +18,17 @@ const DashboardHome = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/${user?.email}`)
+        axios.get(`http://localhost:3000/users/${user?.email}`, {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
             .then((res) => {
                 setUserDetails(res.data)
                 setLoading(false)
             })
 
-    }, [user?.email, setLoading])
+    }, [user?.email, setLoading, user?.accessToken])
 
 
     if (loading) {

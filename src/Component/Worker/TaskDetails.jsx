@@ -14,11 +14,14 @@ const TaskDetails = () => {
     const [task, setTask] = useState([]);
     useEffect(() => {
 
-        axios.get(`http://localhost:3000/tasks/${id}`)
+        axios.get(`http://localhost:3000/tasks/${id}`,{
+            headers: {
+                authorization : `Bearer ${user?.accessToken}`}
+        })
             .then(res => {
                 setTask(res.data)
             })
-    }, [id, setLoading]);
+    }, [id, setLoading,user?.accessToken]);
 
 
     const { buyerEmail, buyerName, payable_amount, task_title, _id } = task

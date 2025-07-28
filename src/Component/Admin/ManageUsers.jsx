@@ -60,7 +60,11 @@ const ManageUsers = () => {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                axios.delete(`http://localhost:3000/users/${id}`)
+                axios.delete(`http://localhost:3000/users/${id}`, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
+                })
                     .then(res => {
                         if (res.data.deletedCount) {
 

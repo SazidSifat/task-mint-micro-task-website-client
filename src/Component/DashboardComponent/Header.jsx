@@ -19,7 +19,11 @@ const Header = () => {
     useEffect(() => {
         if (email) {
             axios
-                .get(`http://localhost:3000/users/${encodeURIComponent(email)}`)
+                .get(`http://localhost:3000/users/${encodeURIComponent(email)}`, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
+                })
                 .then(res => setUserDetails(res.data))
                 .catch(err => console.error(err));
         }
@@ -42,12 +46,15 @@ const Header = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/notification/${email}`)
+        axios.get(`http://localhost:3000/notification/${email}`,{
+            headers: {
+                authorization : `Bearer ${user?.accessToken}`}
+        })
             .then((res) => {
                 setNotification(res.data)
             })
             .catch(() => { })
-    }, [email])
+    }, [email,user?.accessToken])
 
     const role = userDetails?.role?.charAt(0).toUpperCase() + userDetails?.role?.slice(1).toLowerCase()
 
@@ -58,7 +65,7 @@ const Header = () => {
             <div className="flex items-center gap-4 ml-auto">
                 <div className="text-right hidden sm:block">
                     <div className="font-medium ">Available coin: {userDetails?.coin}</div>
-                    <div className="text-sm ">{userDetails.role} | {user?.displayName}</div>
+                    <div className="text-sm capitalize">{userDetails.role} | {user?.displayName}</div>
                 </div>
                 <img
                     src={user?.photoURL}

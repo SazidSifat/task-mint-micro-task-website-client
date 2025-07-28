@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 const AdminHome = () => {
@@ -28,19 +28,27 @@ const AdminHome = () => {
 
 
     useEffect(() => {
-        axios.get('http://localhost:3000/withdraw-request')
+        axios.get('http://localhost:3000/withdraw-request', {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
             .then(res => {
                 const newW = res.data.filter(w => w.status !== "approved")
                 const approvedW = res.data.filter(w => w.status === "approved")
                 setWithdrawals(newW)
                 setApproved(approvedW)
             })
-    }, [])
+    }, [user?.accessToken])
 
     const handleApprove = (id) => {
-        axios.patch(`http://localhost:3000/approveWithdraw/${id}`)
+        axios.patch(`http://localhost:3000/approveWithdraw/${id}`, {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
             .then(({ data }) => {
-                if (data.modifiedCount ) {
+                if (data.modifiedCount) {
                     setWithdrawals(prev => prev.filter(w => w._id !== id));
                     Swal.fire({
                         position: "center",

@@ -2,10 +2,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import Swal from 'sweetalert2';
+import useAuth from '../../Hook/useAuth';
 
 const ManageTasks = () => {
 
     const [tasks, setTasks] = useState([])
+    const { user } = useAuth()
 
     useEffect(() => {
         axios.get('http://localhost:3000/tasks')
@@ -25,7 +27,11 @@ const ManageTasks = () => {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                axios.delete(`http://localhost:3000/tasks/${id}`)
+                axios.delete(`http://localhost:3000/tasks/${id}`, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
+                })
                     .then(res => {
                         if (res.data.deletedCount) {
                             const afterDelete = tasks.filter(task => task._id !== id)

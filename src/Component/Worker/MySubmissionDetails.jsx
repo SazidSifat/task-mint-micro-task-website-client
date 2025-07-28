@@ -13,14 +13,18 @@ const MySubmissionDetails = () => {
 
 
         if (email) {
-            axios.get(`http://localhost:3000/my-submitted-task/${email}`)
+            axios.get(`http://localhost:3000/my-submitted-task/${email}`, {
+                headers: {
+                    authorization: `Bearer ${user?.accessToken}`
+                }
+            })
                 .then((res) => {
                     setTasks(res.data)
                 })
         }
-    }, [email])
+    }, [email,user?.accessToken])
 
-  
+
 
     return (
         <div className="overflow-x-auto rounded-xl shadow-lg border border-base-300">
@@ -47,10 +51,10 @@ const MySubmissionDetails = () => {
                             <td>
                                 <p
                                     className={`font-bold capitalize ${task.status === "pending"
-                                            ? "text-secondary"
-                                            : task.status === "rejected"
-                                                ? "text-error"
-                                                : "text-primary"
+                                        ? "text-secondary"
+                                        : task.status === "rejected"
+                                            ? "text-error"
+                                            : "text-primary"
                                         }`}
                                 >
                                     {task.status}

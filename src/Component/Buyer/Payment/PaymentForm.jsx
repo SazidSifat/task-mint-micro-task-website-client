@@ -52,8 +52,10 @@ const PaymentForm = () => {
         const amountInCents = parseInt(coinP.price) * 100
 
         // 
-        const res = await axios.post('http://localhost:3000/create-payment-intent', {
-            amountInCents
+        const res = await axios.post('http://localhost:3000/create-payment-intent', { amountInCents }, {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
         })
 
         const clientSecret = res.data.clientSecret
@@ -82,6 +84,10 @@ const PaymentForm = () => {
                     email: user.email,
                     name: user.displayName
 
+                }, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
                 })
                     .then(res => {
                         if (res.data) {

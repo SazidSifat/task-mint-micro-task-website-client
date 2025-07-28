@@ -12,10 +12,13 @@ const WorkerHome = () => {
     useEffect(() => {
 
         if (email) {
-            axios.get(`http://localhost:3000/my-submitted-task/${email}`)
+            axios.get(`http://localhost:3000/my-submitted-task/${email}`,{
+            headers: {
+                authorization : `Bearer ${user?.accessToken}`}
+        })
                 .then(res => setSubmissions(res.data))
         }
-    }, [email]);
+    }, [email,user?.accessToken]);
 
 
     const totalSubmission = submissions.length

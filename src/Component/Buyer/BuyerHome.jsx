@@ -17,24 +17,32 @@ const BuyerHome = () => {
 
     useEffect(() => {
         if (email) {
-            axios.get(`http://localhost:3000/my-tasks/${encodeURIComponent(email)}`)
+            axios.get(`http://localhost:3000/my-tasks/${encodeURIComponent(email)}`, {
+                headers: {
+                    authorization: `Bearer ${user?.accessToken}`
+                }
+            })
                 .then(res => {
                     setMyTask(res.data)
                 })
                 .catch(err => console.error(err));
         }
-    }, [email]);
+    }, [email, user?.accessToken]);
 
     useEffect(() => {
         if (email) {
-            axios.get(`http://localhost:3000/submitted-task?buyerEmail=${email}`)
+            axios.get(`http://localhost:3000/submitted-task?buyerEmail=${email}`, {
+                headers: {
+                    authorization: `Bearer ${user?.accessToken}`
+                }
+            })
                 .then(res => {
                     const task = res.data.filter(t => t.status === "pending")
                     setPendingTaskSubmitted(task)
                 })
                 .catch(err => console.error(err));
         }
-    }, [email]);
+    }, [email, user?.accessToken]);
 
 
     myTask.forEach(t => {
@@ -47,8 +55,15 @@ const BuyerHome = () => {
 
     const updateTask = (id, newStatus) => {
 
-        axios.patch(`http://localhost:3000/update-submitted-task/${id}`, { newStatus: newStatus })
+        axios.patch(`http://localhost:3000/update-submitted-task/${id}`, { newStatus: newStatus }, {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
             .then(() => {
+
+                const newTask = selectedSubmission.filter(t => t._id !== id)
+                setPendingTaskSubmitted(newTask)
 
                 if (newStatus === "approved") {
                     Swal.fire({

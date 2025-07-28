@@ -1,9 +1,26 @@
-import React from 'react';
-import { useLoaderData } from 'react-router';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import useAuth from '../../Hook/useAuth';
 
 const PaymentHistory = () => {
 
-    const { data } = useLoaderData()
+    const [wData, setWData] = useState([])
+    const { user } = useAuth()
+    const email = user?.email
+
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/payment-history/${email}`, {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
+            .then(({ data }) => {
+                setWData(data)
+
+            })
+    }, [email,user?.accessToken])
+
     return (
         <div className=" mx-auto p-6">
             <h2 className="text-2xl font-bold text-[#5a716b] mb-6">Payment History</h2>
@@ -21,7 +38,7 @@ const PaymentHistory = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-base-200 divide-y text-center">
-                        {data.map((payment) => (
+                        {wData.map((payment) => (
                             <tr key={payment._id} className="">
                                 <td className="px-4 py-3 font-bold text-base-content">{payment.email}</td>
                                 <td className="px-4 py-3 text-green-700 font-semibold">${(payment.amount / 100).toFixed(2)}</td>

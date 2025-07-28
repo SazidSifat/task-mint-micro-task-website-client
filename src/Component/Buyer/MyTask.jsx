@@ -20,11 +20,15 @@ const MyTask = () => {
     useEffect(() => {
         if (email) {
             axios
-                .get(`http://localhost:3000/my-tasks/${encodeURIComponent(email)}`)
+                .get(`http://localhost:3000/my-tasks/${encodeURIComponent(email)}`, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
+                })
                 .then(res => setMyTasks(res.data))
                 .catch(err => console.error(err));
         }
-    }, [email]);
+    }, [email,user?.accessToken]);
 
 
     const handleDeleteTask = (id) => {
@@ -41,7 +45,11 @@ const MyTask = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`http://localhost:3000/my-tasks/${id}`)
+                axios.delete(`http://localhost:3000/my-tasks/${id}`, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
+                })
                     .then(res => {
                         if (res.data.deletedCount) {
                             setMyTasks(prev => prev.filter(task => task._id !== id))
@@ -80,7 +88,11 @@ const MyTask = () => {
             submission_info: info
         }
 
-        axios.put(`http://localhost:3000/update-my-task/${id}`, updatedData)
+        axios.put(`http://localhost:3000/update-my-task/${id}`, updatedData, {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
             .then(({ data }) => {
                 if (data.modifiedCount === 1) {
                     Swal.fire({

@@ -11,7 +11,6 @@ import PurchaseCoin from "../Component/Buyer/PurchaseCoin";
 import BuyerHome from "../Component/Buyer/BuyerHome";
 import Payment from "../Component/Buyer/Payment/Payment";
 import PaymentHistory from "../Component/Buyer/PaymentHistory";
-import axios from "axios";
 import Loading from "../Shared/Loading";
 import Dashboard from "../Component/Dashboard";
 import DashboardHome from "../Component/DashboardHome";
@@ -73,8 +72,6 @@ const router = createBrowserRouter([
             {
                 path: 'dashboard/payment-history/:email',
                 Component: PaymentHistory,
-                loader: ({ params }) => axios.get(`http://localhost:3000/payment-history/${params.email}`),
-                hydrateFallbackElement: <Loading />
             },
             {
                 path: "/dashboard/manage-users",

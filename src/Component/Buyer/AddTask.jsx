@@ -15,11 +15,15 @@ const AddTask = () => {
     useEffect(() => {
         if (buyerEmail) {
             axios
-                .get(`http://localhost:3000/users/${encodeURIComponent(buyerEmail)}`)
+                .get(`http://localhost:3000/users/${encodeURIComponent(buyerEmail)}`, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
+                })
                 .then(res => setUserDetails(res.data))
                 .catch(err => console.error(err));
         }
-    }, [buyerEmail]);
+    }, [buyerEmail, user?.accessToken]);
 
 
     const onSubmit = async (data) => {
