@@ -18,15 +18,16 @@ const Withdrawals = () => {
 
     useEffect(() => {
         if (email) {
-            axios.get(`http://localhost:3000/users/${email}`,{
-            headers: {
-                authorization : `Bearer ${user?.accessToken}`}
-        })
+            axios.get(`http://localhost:3000/users/${email}`, {
+                headers: {
+                    authorization: `Bearer ${user?.accessToken}`
+                }
+            })
                 .then((res) => {
                     setCurrentUser(res.data)
                 })
         }
-    }, [email,user?.accessToken])
+    }, [email, user?.accessToken])
 
 
     const handleSubmit = async (e) => {
@@ -45,9 +46,10 @@ const Withdrawals = () => {
         }
 
 
-        axios.post('http://localhost:3000/withdraw-request', { withdrawData: withdrawData },{
+        axios.post('http://localhost:3000/withdraw-request', { withdrawData: withdrawData }, {
             headers: {
-                authorization : `Bearer ${user?.accessToken}`}
+                authorization: `Bearer ${user?.accessToken}`
+            }
         })
             .then(res => {
                 if (res.data) {

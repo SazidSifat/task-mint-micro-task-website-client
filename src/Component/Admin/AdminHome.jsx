@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import useAuth from "../../Hook/useAuth";
 
 const AdminHome = () => {
+    const { user } = useAuth();
     const [withdrawals, setWithdrawals] = useState([]);
-    const [user, setUser] = useState([]);
+    const [userDB, setUserDB] = useState([]);
     const [buyer, setBuyer] = useState([]);
     const [worker, setWorker] = useState([]);
     const [approved, setApproved] = useState([]);
@@ -14,7 +16,7 @@ const AdminHome = () => {
     useEffect(() => {
         axios.get('http://localhost:3000/users')
             .then(res => {
-                setUser(res.data)
+                setUserDB(res.data)
                 const allBuyer = res.data.filter(buyer => buyer.role === 'buyer')
                 setBuyer(allBuyer)
                 const allWorker = res.data.filter(worker => worker.role === 'worker')
@@ -22,7 +24,7 @@ const AdminHome = () => {
             })
     }, [])
 
-    user.forEach(u => totalCoin += parseInt(u.coin))
+    userDB.forEach(u => totalCoin += parseInt(u.coin))
     approved.forEach(w => totalPayment += Number(w.withdrawal_amount))
 
 
@@ -39,12 +41,12 @@ const AdminHome = () => {
                 setWithdrawals(newW)
                 setApproved(approvedW)
             })
-    }, [user?.accessToken])
+    }, [userDB?.accessToken])
 
     const handleApprove = (id) => {
         axios.patch(`http://localhost:3000/approveWithdraw/${id}`, {
             headers: {
-                authorization: `Bearer ${user?.accessToken}`
+                authorization: `Bearer ${userDB?.accessToken}`
             }
         })
             .then(({ data }) => {
