@@ -13,7 +13,6 @@ const PurchaseCoin = () => {
     useEffect(() => {
         axios.get("/coinPackage.json")
             .then(res => {
-                console.log(res.data)
                 setCoinPackages(res.data);
                 setLoading(false);
             })

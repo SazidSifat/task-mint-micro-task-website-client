@@ -40,7 +40,6 @@ const AdminHome = () => {
     const handleApprove = (id) => {
         axios.patch(`http://localhost:3000/approveWithdraw/${id}`)
             .then(({ data }) => {
-                console.log( data )
                 if (data.modifiedCount ) {
                     setWithdrawals(prev => prev.filter(w => w._id !== id));
                     Swal.fire({

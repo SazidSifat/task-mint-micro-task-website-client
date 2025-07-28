@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import useAuth from "../../Hook/useAuth";
 import { RxCross2 } from "react-icons/rx";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 
 const BuyerHome = () => {
@@ -35,12 +37,6 @@ const BuyerHome = () => {
     }, [email]);
 
 
-
-    console.log(pendingTaskSubmitted)
-
-
-
-
     myTask.forEach(t => {
         totalPayment += t.totalPayable
         totalReqWorker += parseInt(t.required_workers)
@@ -52,11 +48,32 @@ const BuyerHome = () => {
     const updateTask = (id, newStatus) => {
 
         axios.patch(`http://localhost:3000/update-submitted-task/${id}`, { newStatus: newStatus })
-            .then(({ data }) => {
-                console.log(data)
+            .then(() => {
+
+                if (newStatus === "approved") {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Task Approved ",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }
+                    )
+                } else {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Task Rejected ",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }
+                    )
+
+                }
             })
-            .catch(err => {
-                console.log(err)
+            .catch(() => {
+                toast.error("Task Fetching Failed")
+
             })
 
 

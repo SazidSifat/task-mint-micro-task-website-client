@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import useAuth from '../../../Hook/useAuth';
 import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 const PaymentForm = () => {
     const stripe = useStripe()
@@ -30,7 +31,7 @@ const PaymentForm = () => {
         }
 
         const card = elements.getElement(CardElement)
-        // console.log(card)
+
 
         if (!card) {
             return
@@ -43,12 +44,9 @@ const PaymentForm = () => {
         })
 
         if (error) {
-            // console.log(error)
             setErrorMsg(error.message)
-
         } else {
             setErrorMsg('')
-            // console.log(paymentMethod)
         }
 
         const amountInCents = parseInt(coinP.price) * 100
@@ -72,7 +70,7 @@ const PaymentForm = () => {
         })
 
         if (result.error) {
-            // console.log(result.error.message)
+            toast.error(result.error)
         } else {
             if (result.paymentIntent.status === 'succeeded') {
 

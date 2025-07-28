@@ -20,21 +20,8 @@ const TaskDetails = () => {
             })
     }, [id, setLoading]);
 
-    console.log(task)
 
-    const { buyerEmail, buyerName, completion_date, payable_amount, required_workers, submission_info, task_detail, task_image, task_title, totalPayable, _id } = task
-
-    //  buyerEmail
-    // buyerName
-    // completion_date
-    // payable_amount
-    // required_workers
-    // submission_info
-    // task_detail
-    // task_image 
-    // task_title 
-    // totalPayable
-    // _id
+    const { buyerEmail, buyerName,  payable_amount,  task_title, _id } = task
 
 
     const handleSubmit = async (e) => {

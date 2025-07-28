@@ -11,7 +11,6 @@ const TaskList = () => {
             .then(res => setTasks(res.data))
     }, [])
 
-    console.log(tasks)
     return (
         <div className=" mx-auto p-6 space-y-6">
             <h2 className="text-2xl font-bold text-primary mb-4">Available Tasks</h2>

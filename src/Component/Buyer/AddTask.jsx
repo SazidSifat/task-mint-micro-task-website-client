@@ -25,7 +25,6 @@ const AddTask = () => {
     const onSubmit = async (data) => {
         const totalPayable = parseInt(data.required_workers) * parseInt(data.payable_amount)
         const task_image = data.task_image[0]
-        console.log(task_image)
         setLoading(true)
 
 
@@ -34,11 +33,8 @@ const AddTask = () => {
         const response = await axios.post(
             `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgBBApi}`, imageFormData
         );
-        // console.log(response)
         const imageUrl = response?.data?.data?.display_url;
         const taskDetails = { ...data, task_image: imageUrl, totalPayable, buyerEmail: buyerEmail, buyerName: buyerName }
-
-        console.log(taskDetails)
 
         if (taskDetails && buyerEmail) {
             if (userDetails.coin < totalPayable) {
@@ -49,7 +45,6 @@ const AddTask = () => {
                     .then(res => {
                         if (res.data.insertedId) {
                             setLoading(false)
-                            axios.patch
                             Swal.fire({
                                 position: "center",
                                 icon: "success",
@@ -62,11 +57,25 @@ const AddTask = () => {
                     })
                     .catch(err => {
                         setLoading(false)
-                        console.log(err)
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Task adding Failed",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }
+                        )
                     })
             }
         } else {
-            alert("missing data or email")
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Missing Buyer email",
+                showConfirmButton: false,
+                timer: 1500
+            }
+            )
         }
     }
 

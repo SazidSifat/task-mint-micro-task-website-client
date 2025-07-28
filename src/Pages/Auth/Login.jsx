@@ -19,8 +19,7 @@ const Login = () => {
     const onSubmit = (data) => {
 
         signInWithEmailAndPass(data.email, data.password)
-            .then(res => {
-                console.log(res)
+            .then(() => {
                 toast.success("Login Successful")
                 navigate(state ? state : '/dashboard')
             })
@@ -38,8 +37,6 @@ const Login = () => {
         googleSignIn()
             .then(res => {
                 const user = res.user
-                // console.log(user)
-
                 const userInfo = {
                     name: user.displayName,
                     email: user.email,
@@ -49,13 +46,11 @@ const Login = () => {
                 }
 
                 axios.post('http://localhost:3000/users', userInfo)
-                    .then(res => {
-                        console.log(res.data)
-                    })
+                    .then(() => { })
                 toast.success("Registration Successful")
                 navigate(state ? state : '/dashboard')
             })
-            .catch(err => console.log(err))
+            .catch(() => { })
     }
 
 

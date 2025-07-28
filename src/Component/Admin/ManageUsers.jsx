@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { MdDelete } from "react-icons/md";
 import Swal from 'sweetalert2';
+import useAuth from '../../Hook/useAuth';
 
 const ManageUsers = () => {
 
     const [users, setUsers] = useState([])
+    const { user } = useAuth()
+
+
 
     useEffect(() => {
         axios.get('http://localhost:3000/users')
@@ -14,14 +18,33 @@ const ManageUsers = () => {
     }, [setUsers])
 
     const updateRole = (e, id) => {
-        console.log(id)
         const newRole = e.target.value
-        console.log(newRole)
 
 
-        axios.patch(`http://localhost:3000/update-role/${id}`, { role: newRole })
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
+        axios.patch(`http://localhost:3000/update-role/${id}`, { role: newRole }, {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
+            .then(() => {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Role Updated",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            })
+            .catch(() => {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Role Updating Error",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+            })
     }
 
 

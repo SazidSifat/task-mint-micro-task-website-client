@@ -6,10 +6,6 @@ const PrivateRoute = ({ children }) => {
     const { user } = useAuth()
     const location = useLocation()
 
-
-    console.log(location)
-
-
     if (!user) {
         <Navigate state={location.pathname} to='/login' />
     }

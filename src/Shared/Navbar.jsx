@@ -6,6 +6,7 @@ import AuthContext from '../Context/AuthContext';
 import useAuth from '../Hook/useAuth';
 import axios from 'axios';
 import { ImCoinDollar } from "react-icons/im";
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
 
@@ -17,7 +18,6 @@ const Navbar = () => {
     useEffect(() => {
         axios.get(`http://localhost:3000/users/${user?.email}`)
             .then(res => {
-                console.log(res.data)
                 setDbUser(res.data)
             })
     }, [user?.email])
@@ -27,7 +27,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
 
-        logout().then(res => console.log(res))
+        logout().then(() => { toast.success("Logout Successful") })
 
     }
 

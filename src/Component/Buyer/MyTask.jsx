@@ -55,8 +55,15 @@ const MyTask = () => {
                         }
 
                     })
-                    .catch(err => {
-                        console.log(err)
+                    .catch(() => {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Failed to delete",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
                     })
 
             }
@@ -64,7 +71,6 @@ const MyTask = () => {
 
 
     }
-
 
     const updateMyTask = (id) => {
 
@@ -74,20 +80,19 @@ const MyTask = () => {
             submission_info: info
         }
 
-
         axios.put(`http://localhost:3000/update-my-task/${id}`, updatedData)
             .then(({ data }) => {
-               if(data.modifiedCount === 1){
-                Swal.fire({
-                    position:"center",
-                    timer:1500,
-                    title: "Updated Successfully",
-                    showCancelButton:false,
-                    icon: "success",
-                    showConfirmButton:false
-                })
+                if (data.modifiedCount === 1) {
+                    Swal.fire({
+                        position: "center",
+                        timer: 1500,
+                        title: "Updated Successfully",
+                        showCancelButton: false,
+                        icon: "success",
+                        showConfirmButton: false
+                    })
 
-               }
+                }
             })
     }
 

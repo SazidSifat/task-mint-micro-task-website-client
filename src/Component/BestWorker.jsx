@@ -8,7 +8,7 @@ const BestWorker = () => {
 
         axios.get('http://localhost:3000/workerDetails')
             .then((res) => setWorker(res.data))
-            .then(err => console.log(err))
+            .catch(() => {})
 
     }, [])
 

@@ -25,30 +25,28 @@ const Header = () => {
         }
     }, [email]);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
+    // useEffect(() => {
+    //     const handleClickOutside = (event) => {
 
 
-            if (popupRef.current && !popupRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
+    //         if (popupRef.current && !popupRef.current.contains(event.target)) {
+    //             setIsOpen(false);
+    //         }
+    //     };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    //     document.addEventListener('mousedown', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutside);
+    //     };
+    // }, []);
 
 
     useEffect(() => {
         axios.get(`http://localhost:3000/notification/${email}`)
             .then((res) => {
                 setNotification(res.data)
-                console.log(res.data)
-
             })
-            .catch(err => console.log(err))
+            .catch(() => { })
     }, [email])
 
     const role = userDetails?.role?.charAt(0).toUpperCase() + userDetails?.role?.slice(1).toLowerCase()
