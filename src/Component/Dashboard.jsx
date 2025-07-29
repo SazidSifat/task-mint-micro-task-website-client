@@ -5,17 +5,15 @@ import axios from 'axios';
 import BuyerDashboard from '../Layouts/BuyerDashboard.';
 import WorkerDashboard from '../Layouts/WorkerDashboard';
 import AdminDashboard from '../Layouts/AdminDashboard';
+import { useNavigate } from 'react-router';
 
 const Dashboard = () => {
 
 
-    const { user, loading, setLoading } = useAuth()
+    const { user, loading, setLoading, logout } = useAuth()
     const [userDetails, setUserDetails] = useState({})
     const role = userDetails.role
-
-
-
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`https://microtaskserver.vercel.app/users/${user?.email}`, {
@@ -27,9 +25,22 @@ const Dashboard = () => {
                 setUserDetails(res.data)
                 setLoading(false)
             })
+            .catch((error) => {
+                const status = error.response?.status;
+
+                if (status === 401 || status === 400) {
+                    // No token or invalid token
+                    logout();
+                    navigate('/login');
+                } else if (status === 403) {
+                    navigate('/forbidden');
+                } else {
+                    console.error("Unexpected error", error);
+                }
+            })
 
 
-    }, [user?.email, setLoading, user?.accessToken])
+    }, [user?.email, setLoading, user?.accessToken, logout, navigate])
 
 
     if (!user || loading) {

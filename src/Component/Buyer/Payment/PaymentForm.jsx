@@ -1,7 +1,7 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import useAuth from '../../../Hook/useAuth';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
@@ -10,7 +10,8 @@ const PaymentForm = () => {
     const stripe = useStripe();
     const elements = useElements();
     const { id } = useParams();
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     const [errorMsg, setErrorMsg] = useState('');
     const [loading, setLoading] = useState(false);
@@ -98,9 +99,19 @@ const PaymentForm = () => {
                 });
             }
         } catch (err) {
-            console.error(err);
             toast.error("Something went wrong.");
             setLoading(false);
+            const status = error.response?.status;
+
+            if (status === 401 || status === 400) {
+                // No token or invalid token
+                logout();
+                navigate('/login');
+            } else if (status === 403) {
+                navigate('/forbidden');
+            } else {
+                console.error("Unexpected error", error);
+            }
         }
     };
 

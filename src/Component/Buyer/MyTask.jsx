@@ -3,10 +3,12 @@ import useAuth from '../../Hook/useAuth';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Zoom } from 'react-awesome-reveal';
+import { useNavigate } from 'react-router';
 
 const MyTask = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const email = user?.email;
+    const navigate = useNavigate();
 
     const [myTasks, setMyTasks] = useState([]);
     const [openModal, setOpenModal] = useState(null);
@@ -70,7 +72,7 @@ const MyTask = () => {
                         }
                         setDeletingTaskId(null);
                     })
-                    .catch(() => {
+                    .catch((error) => {
                         Swal.fire({
                             title: "Error!",
                             text: "Failed to delete",
@@ -79,12 +81,24 @@ const MyTask = () => {
                             timer: 1500,
                         });
                         setDeletingTaskId(null);
+
+
+                        const status = error.response?.status;
+
+                        if (status === 401 || status === 400) {
+                            // No token or invalid token
+                            logout();
+                            navigate('/login');
+                        } else if (status === 403) {
+                            navigate('/forbidden');
+                        } else {
+                            console.error("Unexpected error", error);
+                        }
                     });
             }
         });
     };
 
-    // Update task handler with loading indicator and modal close on success
     const updateMyTask = (id) => {
         setUpdatingTaskId(id);
 
@@ -121,7 +135,7 @@ const MyTask = () => {
                 }
                 setUpdatingTaskId(null);
             })
-            .catch(() => {
+            .catch((error) => {
                 Swal.fire({
                     title: "Error!",
                     text: "Failed to update task",
@@ -130,6 +144,17 @@ const MyTask = () => {
                     timer: 1500,
                 });
                 setUpdatingTaskId(null);
+                const status = error.response?.status;
+
+                if (status === 401 || status === 400) {
+                    // No token or invalid token
+                    logout();
+                    navigate('/login');
+                } else if (status === 403) {
+                    navigate('/forbidden');
+                } else {
+                    console.error("Unexpected error", error);
+                }
             });
     };
 
@@ -161,7 +186,7 @@ const MyTask = () => {
                         {loadingTasks ? (
                             <tr>
                                 <td colSpan={5} className="p-6 text-center text-gray-500 font-medium">
-                                   <span className="loading loading-bars loading-xs"></span>
+                                    <span className="loading loading-bars loading-xs"></span>
                                 </td>
                             </tr>
                         ) : myTasks.length === 0 ? (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import Swal from "sweetalert2";
 import useAuth from "../../Hook/useAuth";
@@ -8,20 +8,33 @@ import Loading from "../../Shared/Loading";
 const TaskDetails = () => {
     const { id } = useParams();
 
-    const { user, setLoading } = useAuth();
+    const { user, setLoading, logout } = useAuth();
     const { email, displayName } = user
+    const navigate = useNavigate();
 
     const [task, setTask] = useState([]);
     useEffect(() => {
 
-        axios.get(`https://microtaskserver.vercel.app/tasks/${id}`,{
+        axios.get(`https://microtaskserver.vercel.app/tasks/${id}`, {
             headers: {
-                authorization : `Bearer ${user?.accessToken}`}
+                authorization: `Bearer ${user?.accessToken}`
+            }
         })
             .then(res => {
                 setTask(res.data)
             })
-    }, [id, setLoading,user?.accessToken]);
+            .catch(error => {
+                const status = error.response?.status;
+
+                if (status === 401 || status === 400) {
+                    // No token or invalid token
+                    logout();
+                    navigate('/login');
+                } else if (status === 403) {
+                    navigate('/forbidden');
+                } 
+            });
+    }, [id, setLoading, user?.accessToken, logout, navigate]);
 
 
     const { buyerEmail, buyerName, payable_amount, task_title, _id } = task
@@ -61,7 +74,7 @@ const TaskDetails = () => {
                         })
                     }
                 })
-                .catch(() => {
+                .catch((error) => {
                     Swal.fire({
                         position: "center",
                         icon: "error",
@@ -69,6 +82,15 @@ const TaskDetails = () => {
                         showConfirmButton: false,
                         timer: 1500
                     })
+
+                    const status = error.response?.status;
+                    if (status === 401 || status === 400) {
+                        // No token or invalid token
+                        logout();
+                        navigate('/login');
+                    } else if (status === 403) {
+                        navigate('/forbidden');
+                    } 
                 })
         }
 

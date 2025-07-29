@@ -3,11 +3,14 @@ import axios from 'axios';
 import { MdDelete } from "react-icons/md";
 import Swal from 'sweetalert2';
 import useAuth from '../../Hook/useAuth';
+import { useNavigate } from 'react-router';
 
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         setLoading(true);
@@ -48,15 +51,19 @@ const ManageUsers = () => {
                     prevUsers.map(u => (u._id === id ? { ...u, role: newRole } : u))
                 );
             })
-            .catch(() => {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Role Updating Error",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            });
+            .catch((error) => {
+                const status = error.response?.status;
+
+                if (status === 401 || status === 400) {
+                    // No token or invalid token
+                    logout();
+                    navigate('/login');
+                } else if (status === 403) {
+                    navigate('/forbidden');
+                } else {
+                    console.error("Unexpected error", error);
+                }
+            })
     };
 
     const handleDelete = (id) => {
@@ -85,14 +92,19 @@ const ManageUsers = () => {
                             });
                         }
                     })
-                    .catch(() => {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Failed to delete user",
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
-                    });
+                    .catch((error) => {
+                const status = error.response?.status;
+
+                if (status === 401 || status === 400) {
+                    // No token or invalid token
+                    logout();
+                    navigate('/login');
+                } else if (status === 403) {
+                    navigate('/forbidden');
+                } else {
+                    console.error("Unexpected error", error);
+                }
+            })
             }
         });
     };

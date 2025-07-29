@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../Hook/useAuth';
 import axios from 'axios';
 import Loading from '../../Shared/Loading';
+import { useNavigate } from 'react-router';
 
 const MySubmissionDetails = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const email = user?.email;
+    const navigate = useNavigate();
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +26,19 @@ const MySubmissionDetails = () => {
                 setTasks(res.data);
                 setCurrentPage(1); // Reset to first page on new data load
             })
-            .catch(err => console.error('Failed to fetch tasks:', err))
+            .catch(error => {
+                const status = error.response?.status;
+
+                if (status === 401 || status === 400) {
+                    // No token or invalid token
+                    logout();
+                    navigate('/login');
+                } else if (status === 403) {
+                    navigate('/forbidden');
+                } else {
+                    console.error("Unexpected error", error);
+                }
+            })
             .finally(() => setLoading(false));
     }, [email, user?.accessToken]);
 
@@ -63,7 +77,7 @@ const MySubmissionDetails = () => {
                                 <th scope="col">Title</th>
                                 <th scope="col">Buyer Name</th>
                                 <th scope="col">Payable</th>
-                                <th scope="col">Submitted Date</th> 
+                                <th scope="col">Submitted Date</th>
                                 <th scope="col">Status</th>
                             </tr>
                         </thead>

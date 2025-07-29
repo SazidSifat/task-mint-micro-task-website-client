@@ -8,13 +8,15 @@ import AdminDashboard from '../Layouts/AdminDashboard';
 import BuyerHome from './Buyer/BuyerHome';
 import WorkerHome from './Worker/WorkerHome';
 import AdminHome from './Admin/AdminHome';
+import { useNavigate } from 'react-router';
 
 const DashboardHome = () => {
 
 
-    const { user, loading, setLoading } = useAuth()
+    const { user, loading, setLoading, logout } = useAuth()
     const [userDetails, setUserDetails] = useState({})
     const role = userDetails.role
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -26,6 +28,19 @@ const DashboardHome = () => {
             .then((res) => {
                 setUserDetails(res.data)
                 setLoading(false)
+            })
+            .catch((error) => {
+                const status = error.response?.status;
+
+                if (status === 401 || status === 400) {
+                    // No token or invalid token
+                    logout();
+                    navigate('/login');
+                } else if (status === 403) {
+                    navigate('/forbidden');
+                } else {
+                    console.error("Unexpected error", error);
+                }
             })
 
     }, [user?.email, setLoading, user?.accessToken])

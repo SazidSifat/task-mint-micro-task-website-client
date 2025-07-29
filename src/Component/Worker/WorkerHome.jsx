@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../Hook/useAuth";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const WorkerHome = () => {
     const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
+    const { user,logout } = useAuth();
     const email = user?.email;
     let totalEarning = 0;
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (email) {
@@ -21,9 +23,19 @@ const WorkerHome = () => {
                     setSubmissions(res.data);
                     setLoading(false);
                 })
-                .catch(err => {
-                    console.error(err);
+                .catch(error => {
                     setLoading(false);
+                    const status = error.response?.status;
+
+                    if (status === 401 || status === 400) {
+                        // No token or invalid token
+                        logout();
+                        navigate('/login');
+                    } else if (status === 403) {
+                        navigate('/forbidden');
+                    } else {
+                        console.error("Unexpected error", error);
+                    }
                 });
         }
     }, [email, user?.accessToken]);

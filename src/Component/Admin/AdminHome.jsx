@@ -2,16 +2,17 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import useAuth from "../../Hook/useAuth";
+import { useNavigate } from "react-router";
 
 const AdminHome = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
 
     const [withdrawals, setWithdrawals] = useState([]);
     const [userDB, setUserDB] = useState([]);
     const [buyer, setBuyer] = useState([]);
     const [worker, setWorker] = useState([]);
     const [approved, setApproved] = useState([]);
-
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
     let totalCoin = 0;
@@ -56,18 +57,32 @@ const AdminHome = () => {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
             }
-        }).then(({ data }) => {
-            if (data.modifiedCount) {
-                setWithdrawals(prev => prev.filter(w => w._id !== id));
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Withdrawal Approved Successfully",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
-        });
+        })
+            .then(({ data }) => {
+                if (data.modifiedCount) {
+                    setWithdrawals(prev => prev.filter(w => w._id !== id));
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Withdrawal Approved Successfully",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+            .catch((error) => {
+                const status = error.response?.status;
+
+                if (status === 401 || status === 400) {
+                    // No token or invalid token
+                    logout();
+                    navigate('/login');
+                } else if (status === 403) {
+                    navigate('/forbidden');
+                } else {
+                    console.error("Unexpected error", error);
+                }
+            })
     };
 
     if (loading) {

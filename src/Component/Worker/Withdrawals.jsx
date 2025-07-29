@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import useAuth from "../../Hook/useAuth";
+import { useNavigate } from "react-router";
 
 const Withdrawals = () => {
     const [currentUser, setCurrentUser] = useState({});
@@ -11,7 +12,8 @@ const Withdrawals = () => {
     const [accountNumber, setAccountNumber] = useState("");
     const [loading, setLoading] = useState(true); // ✅ loading state
 
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
     const { email, displayName } = user;
 
     useEffect(() => {
@@ -27,7 +29,20 @@ const Withdrawals = () => {
                     setCurrentUser(res.data);
                     setLoading(false); // end loading
                 })
-                .catch(() => setLoading(false)); // handle error
+                .catch((error) => {
+                    setLoading(false)
+                    const status = error.response?.status;
+
+                    if (status === 401 || status === 400) {
+                        // No token or invalid token
+                        logout();
+                        navigate('/login');
+                    } else if (status === 403) {
+                        navigate('/forbidden');
+                    } else {
+                        console.error("Unexpected error", error);
+                    }
+                }); // handle error
         }
     }, [email, user?.accessToken]);
 

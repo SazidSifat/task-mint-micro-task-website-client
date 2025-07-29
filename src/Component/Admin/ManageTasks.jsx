@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import useAuth from '../../Hook/useAuth';
+import { useNavigate } from 'react-router';
 
 const ManageTasks = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true);
@@ -45,7 +47,20 @@ const ManageTasks = () => {
                                 icon: "success"
                             });
                         }
-                    });
+                    })
+                    .catch((error) => {
+                        const status = error.response?.status;
+
+                        if (status === 401 || status === 400) {
+                            // No token or invalid token
+                            logout();
+                            navigate('/login');
+                        } else if (status === 403) {
+                            navigate('/forbidden');
+                        } else {
+                            console.error("Unexpected error", error);
+                        }
+                    })
             }
         });
     };
