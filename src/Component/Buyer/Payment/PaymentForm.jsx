@@ -18,6 +18,8 @@ const PaymentForm = () => {
     const [coinP, setCoinP] = useState({});
 
     useEffect(() => {
+        document.title = "Complete Payment";
+        
         axios.get("/coinPackage.json")
             .then(res => {
                 const coinPackage = res.data.find(d => d.id === id);

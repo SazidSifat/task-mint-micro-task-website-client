@@ -12,6 +12,7 @@ const ManageTasks = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        document.title = "Manage Tasks";
         setLoading(true);
         axios.get('https://microtaskserver.vercel.app/tasks')
             .then(res => {

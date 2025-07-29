@@ -6,6 +6,8 @@ import { FaHome, FaRegUser, FaTasks } from "react-icons/fa";
 
 const AdminSidebar = ({ isOpen, onClose }) => {
 
+
+
     return (
         <aside className={`
             fixed md:relative z-50 h-full bg-primary text-primary-content p-4 w-64
@@ -35,7 +37,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
                     <FaTasks /> Manage Tasks
                 </NavLink>
 
-                
+
             </nav>
         </aside>
     );

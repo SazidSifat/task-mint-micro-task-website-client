@@ -21,6 +21,7 @@ const BuyerHome = () => {
   let totalReqWorker = 0;
 
   useEffect(() => {
+    document.title = "Buyer Dashboard";
         if (!user?.accessToken) return; 
     if (email) {
       setLoadingTasks(true);

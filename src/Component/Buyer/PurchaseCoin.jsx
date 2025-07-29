@@ -11,6 +11,7 @@ const PurchaseCoin = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        document.title = "Purchase Coins";
         axios.get("/coinPackage.json")
             .then(res => {
                 setCoinPackages(res.data);

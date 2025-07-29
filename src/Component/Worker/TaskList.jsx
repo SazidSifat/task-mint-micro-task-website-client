@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router"; // ✅ Fixed the incorrect import
+import { Link } from "react-router";
 
 const TaskList = () => {
     const [tasks, setTasks] = useState([]);
-    const [loading, setLoading] = useState(true); // <-- loading state
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
+        document.title = "Available Tasks";
         axios
             .get("https://microtaskserver.vercel.app/tasks")
             .then(res => setTasks(res.data))

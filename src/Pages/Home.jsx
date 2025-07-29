@@ -10,6 +10,7 @@ import Aos from 'aos';
 const Home = () => {
 
     useEffect(() => {
+        document.title = "Task Mint - Home";
         Aos.init({ duration: 800 });
     }, []);
     return (

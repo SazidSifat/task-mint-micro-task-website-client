@@ -16,8 +16,10 @@ const Withdrawals = () => {
     const { email, displayName } = user;
 
     useEffect(() => {
+        document.title = "Withdraw Earnings";
+        if (!user?.accessToken) return;
         if (email) {
-            setLoading(true); // start loading
+            setLoading(true);
             axios
                 .get(`https://microtaskserver.vercel.app/users/${email}`, {
                     headers: {
@@ -43,7 +45,7 @@ const Withdrawals = () => {
                     }
                 }); // handle error
         }
-    }, [email, user?.accessToken,   logout, navigate]);
+    }, [email, user?.accessToken, logout, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

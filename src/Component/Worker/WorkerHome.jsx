@@ -12,6 +12,7 @@ const WorkerHome = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        document.title = "Worker Dashboard";
         if (!user?.accessToken) return;
         if (email) {
             setLoading(true);

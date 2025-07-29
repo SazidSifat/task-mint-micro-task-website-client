@@ -13,6 +13,7 @@ const ManageUsers = () => {
 
 
     useEffect(() => {
+        document.title = "Manage Users";
         if (!user?.accessToken) return;
         setLoading(true);
         axios.get('https://microtaskserver.vercel.app/users', {

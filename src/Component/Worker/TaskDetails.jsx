@@ -14,7 +14,8 @@ const TaskDetails = () => {
 
     const [task, setTask] = useState([]);
     useEffect(() => {
-            if (!user?.accessToken) return; 
+        document.title = "Task Details";
+        if (!user?.accessToken) return;
 
         axios.get(`https://microtaskserver.vercel.app/tasks/${id}`, {
             headers: {
@@ -33,7 +34,7 @@ const TaskDetails = () => {
                     navigate('/login');
                 } else if (status === 403) {
                     navigate('/forbidden');
-                } 
+                }
             });
     }, [id, setLoading, user?.accessToken, logout, navigate]);
 
@@ -91,7 +92,7 @@ const TaskDetails = () => {
                         navigate('/login');
                     } else if (status === 403) {
                         navigate('/forbidden');
-                    } 
+                    }
                 })
         }
 

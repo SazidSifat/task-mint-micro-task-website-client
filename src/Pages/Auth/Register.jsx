@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hook/useAuth';
@@ -12,6 +12,11 @@ const Register = () => {
     const { registerWithEmailPass } = useAuth()
     const navigate = useNavigate()
     const { state } = useLocation()
+
+
+    useEffect(() => {
+        document.title = "Register"; 
+    }, []);
 
 
     const onsubmit = async (data) => {

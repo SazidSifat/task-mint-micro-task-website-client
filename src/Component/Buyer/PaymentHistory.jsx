@@ -9,6 +9,7 @@ const PaymentHistory = () => {
     const email = user?.email;
 
     useEffect(() => {
+        document.title = "Payment History";
         if (!user?.accessToken) return;
         if (!email) return;
         setLoading(true);

@@ -14,6 +14,7 @@ const AddTask = () => {
     const buyerName = user?.displayName
 
     useEffect(() => {
+        document.title = "Add New Task";
         if (!user?.accessToken) return;
         if (buyerEmail) {
             axios

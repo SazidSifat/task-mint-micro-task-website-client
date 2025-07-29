@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../Shared/Loading';
 import { useForm } from 'react-hook-form';
@@ -14,6 +14,10 @@ const Login = () => {
 
     const navigate = useNavigate()
     const { state } = useLocation()
+
+    useEffect(() => {
+        document.title = "Login";
+    }, []);
 
 
     const onSubmit = (data) => {

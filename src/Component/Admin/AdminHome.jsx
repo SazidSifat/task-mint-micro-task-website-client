@@ -22,6 +22,9 @@ const AdminHome = () => {
     approved.forEach(w => totalPayment += Number(w.withdrawal_amount));
 
     useEffect(() => {
+
+        document.title = "Admin Dashboard";
+
         const fetchData = async () => {
             try {
                 const userRes = await axios.get('https://microtaskserver.vercel.app/users');
