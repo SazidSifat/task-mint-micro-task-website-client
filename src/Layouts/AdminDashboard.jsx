@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import Header from "../Component/DashboardComponent/Header";
 import DashboardFooter from "../Component/DashboardComponent/DashboardFooter";
 import Sidebar from "../Component/DashboardComponent/BuyerSidebar";
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
                 <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-primary font-bold">
                     <HiMiniBars3BottomLeft size={30} />
                 </button>
-                <span className="font-bold text-2xl text-primary">Task Mint</span>
+                <Link to='/' className="font-bold text-2xl text-primary">Task Mint</Link>
             </div>
 
             <div className="flex flex-1 overflow-hidden">
