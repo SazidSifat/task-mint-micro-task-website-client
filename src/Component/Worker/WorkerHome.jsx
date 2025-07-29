@@ -12,7 +12,7 @@ const WorkerHome = () => {
     useEffect(() => {
 
         if (email) {
-            axios.get(`http://localhost:3000/my-submitted-task/${email}`,{
+            axios.get(`https://microtaskserver.vercel.app/my-submitted-task/${email}`,{
             headers: {
                 authorization : `Bearer ${user?.accessToken}`}
         })

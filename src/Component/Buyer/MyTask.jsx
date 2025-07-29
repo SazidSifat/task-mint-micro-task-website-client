@@ -20,7 +20,7 @@ const MyTask = () => {
     useEffect(() => {
         if (email) {
             axios
-                .get(`http://localhost:3000/my-tasks/${encodeURIComponent(email)}`, {
+                .get(`https://microtaskserver.vercel.app/my-tasks/${encodeURIComponent(email)}`, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
                     }
@@ -28,13 +28,10 @@ const MyTask = () => {
                 .then(res => setMyTasks(res.data))
                 .catch(err => console.error(err));
         }
-    }, [email,user?.accessToken]);
+    }, [email, user?.accessToken]);
 
 
     const handleDeleteTask = (id) => {
-
-
-
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -45,7 +42,7 @@ const MyTask = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`http://localhost:3000/my-tasks/${id}`, {
+                axios.delete(`https://microtaskserver.vercel.app/my-tasks/${id}`, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
                     }
@@ -88,7 +85,7 @@ const MyTask = () => {
             submission_info: info
         }
 
-        axios.put(`http://localhost:3000/update-my-task/${id}`, updatedData, {
+        axios.put(`https://microtaskserver.vercel.app/update-my-task/${id}`, updatedData, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
             }

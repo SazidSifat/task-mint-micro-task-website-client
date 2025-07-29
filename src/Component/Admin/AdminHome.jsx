@@ -13,8 +13,10 @@ const AdminHome = () => {
     let totalCoin = 0
     let totalPayment = 0
 
+    console.log(user?.accessToken)
+
     useEffect(() => {
-        axios.get('http://localhost:3000/users')
+        axios.get('https://microtaskserver.vercel.app/users')
             .then(res => {
                 setUserDB(res.data)
                 const allBuyer = res.data.filter(buyer => buyer.role === 'buyer')
@@ -27,10 +29,8 @@ const AdminHome = () => {
     userDB.forEach(u => totalCoin += parseInt(u.coin))
     approved.forEach(w => totalPayment += Number(w.withdrawal_amount))
 
-
-
     useEffect(() => {
-        axios.get('http://localhost:3000/withdraw-request', {
+        axios.get('https://microtaskserver.vercel.app/withdraw-request', {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
             }
@@ -41,12 +41,20 @@ const AdminHome = () => {
                 setWithdrawals(newW)
                 setApproved(approvedW)
             })
-    }, [userDB?.accessToken])
+            .catch(err => {
+                console.error("Error fetching withdrawals:", err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while fetching withdrawals!',
+                });
+            })
+    }, [user?.accessToken])
 
     const handleApprove = (id) => {
-        axios.patch(`http://localhost:3000/approveWithdraw/${id}`, {
+        axios.patch(`https://microtaskserver.vercel.app/approveWithdraw/${id}`, {}, {
             headers: {
-                authorization: `Bearer ${userDB?.accessToken}`
+                authorization: `Bearer ${user?.accessToken}`
             }
         })
             .then(({ data }) => {
@@ -55,6 +63,7 @@ const AdminHome = () => {
                     Swal.fire({
                         position: "center",
                         icon: "success",
+                        title: "Withdrawal Approved Successfully",
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -113,7 +122,7 @@ const AdminHome = () => {
                                     <td className="px-4 py-2 text-green-600 font-bold">${w.withdrawal_amount}</td>
                                     <td className="px-4 py-2">{w.payment_system}</td>
                                     <td className="px-4 py-2">{w.account_number}</td>
-                                    <td className="px-4 py-2">{w.status}</td>
+                                    <td className={`px-4 py-2 ${w.status === "pending" ? "text-secondary" : "text-base-content"}`}>{w.status}</td>
                                     <td className="px-4 py-2 text-base-content/50 ">
                                         {new Date(w.withdraw_date).toLocaleString()}
                                     </td>
@@ -121,8 +130,7 @@ const AdminHome = () => {
                                         <button
                                             onClick={() => handleApprove(w._id)}
                                             className="px-3 py-2 bg-[#5a716b] hover:bg-[#4c5e59] text-white rounded-md text-sm transition"
-                                        >
-                                            Mark as Paid
+                                        > Mark as Paid
                                         </button>
                                     </td>
                                 </tr>

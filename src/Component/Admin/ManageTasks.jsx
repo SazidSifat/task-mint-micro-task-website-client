@@ -10,7 +10,7 @@ const ManageTasks = () => {
     const { user } = useAuth()
 
     useEffect(() => {
-        axios.get('http://localhost:3000/tasks')
+        axios.get('https://microtaskserver.vercel.app/tasks')
             .then(res => setTasks(res.data))
 
     }, [setTasks])
@@ -27,7 +27,7 @@ const ManageTasks = () => {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                axios.delete(`http://localhost:3000/tasks/${id}`, {
+                axios.delete(`https://microtaskserver.vercel.app/tasks/${id}`, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
                     }
@@ -57,32 +57,45 @@ const ManageTasks = () => {
                 <table className="table table-zebra w-full">
                     <thead className="bg-primary text-primary-content">
                         <tr>
-                            <th className=' text-center'>Task Title</th>
-                            <th className=' text-center'>Required Worker</th>
-                            <th className=' text-center'>Submission Date</th>
-                            <th className=' text-center'>Total Payable </th>
-                            <th className=' text-center' >Actions</th>
+                            <th className="text-center">Task Title</th>
+                            <th className="text-center">Required Worker</th>
+                            <th className="text-center">Submission Date</th>
+                            <th className="text-center">Total Payable</th>
+                            <th className="text-center">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {tasks?.map((task) => (
-                            <tr key={task._id}>
 
-                                <td className='text-center'>{task.task_title}</td>
-                                <td className='text-center'>{task.required_workers}</td>
-                                <td className='text-center'>{task.completion_date}</td>
-                                <td className='text-center'>{task.totalPayable}</td>
-                                <td className="flex items-center gap-3 justify-center">
-                                    <button onClick={() => handleDelete(task._id)}
-                                        className="p-2 font-semibold rounded-lg bg-error text-white btn-sm">
-                                        <MdDelete size={20} />
-                                    </button>
+                    <tbody>
+                        {tasks.length !== 0 ? (
+                            tasks.map((task) => (
+                                <tr key={task._id}>
+                                    <td className="text-center">{task.task_title}</td>
+                                    <td className="text-center">{task.required_workers}</td>
+                                    <td className="text-center">{task.completion_date}</td>
+                                    <td className="text-center">{task.totalPayable}</td>
+                                    <td className="flex items-center gap-3 justify-center">
+                                        <button
+                                            onClick={() => handleDelete(task._id)}
+                                            className="p-2 font-semibold rounded-lg bg-error text-white btn-sm"
+                                        >
+                                            <MdDelete size={20} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={5}>
+                                    <p className="p-6 text-center text-base-content/50 text-2xl font-bold">
+                                        No Task Found
+                                    </p>
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>
+
         </div>
     );
 }

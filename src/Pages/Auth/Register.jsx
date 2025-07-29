@@ -48,8 +48,8 @@ const Register = () => {
         registerWithEmailPass(data.email, data.password)
             .then((res) => {
                 updateProfile(res.user, { displayName: data.name, photoURL: imageUrl })
-                axios.post('http://localhost:3000/users', userInfo)
-                    .then(() => {})
+                axios.post('https://microtaskserver.vercel.app/users', userInfo)
+                    .then(() => { })
                 toast.success("Registration Successful")
                 navigate(state ? state : '/dashboard')
             })

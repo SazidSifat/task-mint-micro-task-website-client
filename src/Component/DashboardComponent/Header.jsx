@@ -19,7 +19,7 @@ const Header = () => {
     useEffect(() => {
         if (email) {
             axios
-                .get(`http://localhost:3000/users/${encodeURIComponent(email)}`, {
+                .get(`https://microtaskserver.vercel.app/users/${encodeURIComponent(email)}`, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
                     }
@@ -46,7 +46,7 @@ const Header = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/notification/${email}`,{
+        axios.get(`https://microtaskserver.vercel.app/notification/${email}`,{
             headers: {
                 authorization : `Bearer ${user?.accessToken}`}
         })

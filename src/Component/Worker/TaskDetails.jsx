@@ -14,7 +14,7 @@ const TaskDetails = () => {
     const [task, setTask] = useState([]);
     useEffect(() => {
 
-        axios.get(`http://localhost:3000/tasks/${id}`,{
+        axios.get(`https://microtaskserver.vercel.app/tasks/${id}`,{
             headers: {
                 authorization : `Bearer ${user?.accessToken}`}
         })
@@ -45,7 +45,7 @@ const TaskDetails = () => {
         }
 
         if (submissionDetails !== "") {
-            axios.post('http://localhost:3000/submitted-task', { submittedTask: submittedTask }, {
+            axios.post('https://microtaskserver.vercel.app/submitted-task', { submittedTask: submittedTask }, {
                 headers: {
                     authorization: `Bearer ${user?.accessToken}`
                 }

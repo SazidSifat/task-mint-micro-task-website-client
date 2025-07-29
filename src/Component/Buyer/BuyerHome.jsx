@@ -17,7 +17,7 @@ const BuyerHome = () => {
 
     useEffect(() => {
         if (email) {
-            axios.get(`http://localhost:3000/my-tasks/${encodeURIComponent(email)}`, {
+            axios.get(`https://microtaskserver.vercel.app/my-tasks/${encodeURIComponent(email)}`, {
                 headers: {
                     authorization: `Bearer ${user?.accessToken}`
                 }
@@ -31,7 +31,7 @@ const BuyerHome = () => {
 
     useEffect(() => {
         if (email) {
-            axios.get(`http://localhost:3000/submitted-task?buyerEmail=${email}`, {
+            axios.get(`https://microtaskserver.vercel.app/submitted-task?buyerEmail=${email}`, {
                 headers: {
                     authorization: `Bearer ${user?.accessToken}`
                 }
@@ -55,7 +55,7 @@ const BuyerHome = () => {
 
     const updateTask = (id, newStatus) => {
 
-        axios.patch(`http://localhost:3000/update-submitted-task/${id}`, { newStatus: newStatus }, {
+        axios.patch(`https://microtaskserver.vercel.app/update-submitted-task/${id}`, { newStatus: newStatus }, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
             }

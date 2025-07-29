@@ -15,7 +15,7 @@ const AddTask = () => {
     useEffect(() => {
         if (buyerEmail) {
             axios
-                .get(`http://localhost:3000/users/${encodeURIComponent(buyerEmail)}`, {
+                .get(`https://microtaskserver.vercel.app/users/${encodeURIComponent(buyerEmail)}`, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
                     }
@@ -45,7 +45,7 @@ const AddTask = () => {
                 alert("Insufficient amount ,Please buy coin")
 
             } else {
-                axios.post("http://localhost:3000/add-task", { task: taskDetails }, {
+                axios.post("https://microtaskserver.vercel.app/add-task", { task: taskDetails }, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
                     }

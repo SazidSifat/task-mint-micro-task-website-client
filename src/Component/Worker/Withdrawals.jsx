@@ -18,7 +18,7 @@ const Withdrawals = () => {
 
     useEffect(() => {
         if (email) {
-            axios.get(`http://localhost:3000/users/${email}`, {
+            axios.get(`https://microtaskserver.vercel.app/users/${email}`, {
                 headers: {
                     authorization: `Bearer ${user?.accessToken}`
                 }
@@ -46,7 +46,7 @@ const Withdrawals = () => {
         }
 
 
-        axios.post('http://localhost:3000/withdraw-request', { withdrawData: withdrawData }, {
+        axios.post('https://microtaskserver.vercel.app/withdraw-request', { withdrawData: withdrawData }, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
             }

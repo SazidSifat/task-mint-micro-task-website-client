@@ -12,10 +12,10 @@ import BuyerSidebar from "../Component/DashboardComponent/BuyerSidebar";
 const BuyerDashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    const { loading } = useAuth()
+    const { user } = useAuth()
 
 
-    if (loading) {
+    if (!user) {
         return <Loading />
     }
 

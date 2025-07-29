@@ -6,7 +6,7 @@ const BestWorker = () => {
 
     useEffect(() => {
 
-        axios.get('http://localhost:3000/workerDetails')
+        axios.get('https://microtaskserver.vercel.app/workerDetails')
             .then((res) => setWorker(res.data))
             .catch(() => {})
 

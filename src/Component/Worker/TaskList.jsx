@@ -7,7 +7,7 @@ const TaskList = () => {
     const [tasks, setTasks] = useState([])
 
     useEffect(() => {
-        axios.get("http://localhost:3000/tasks")
+        axios.get("https://microtaskserver.vercel.app/tasks")
             .then(res => setTasks(res.data))
     }, [])
 

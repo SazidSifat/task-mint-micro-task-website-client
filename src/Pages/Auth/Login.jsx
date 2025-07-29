@@ -45,7 +45,7 @@ const Login = () => {
                     imageUrl: user.photoURL,
                 }
 
-                axios.post('http://localhost:3000/users', userInfo)
+                axios.post('https://microtaskserver.vercel.app/users', userInfo)
                     .then(() => { })
                 toast.success("Registration Successful")
                 navigate(state ? state : '/dashboard')

@@ -12,7 +12,7 @@ const ManageUsers = () => {
 
 
     useEffect(() => {
-        axios.get('http://localhost:3000/users')
+        axios.get('https://microtaskserver.vercel.app/users')
             .then(res => setUsers(res.data))
 
     }, [setUsers])
@@ -21,7 +21,7 @@ const ManageUsers = () => {
         const newRole = e.target.value
 
 
-        axios.patch(`http://localhost:3000/update-role/${id}`, { role: newRole }, {
+        axios.patch(`https://microtaskserver.vercel.app/update-role/${id}`, { role: newRole }, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
             }
@@ -60,7 +60,7 @@ const ManageUsers = () => {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                axios.delete(`http://localhost:3000/users/${id}`, {
+                axios.delete(`https://microtaskserver.vercel.app/users/${id}`, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
                     }
@@ -99,29 +99,52 @@ const ManageUsers = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users?.map((user) => (
-                            <tr key={user._id}>
-                                <td><img src={user.imageUrl} alt="" className='w-10 rounded' /></td>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td className='capitalize'>{user.role}</td>
-                                <td>{user.coin}</td>
-                                <td className="flex items-center gap-3 justify-center">
-                                    <button onClick={() => handleDelete(user._id)}
-                                        className="p-2 font-semibold rounded-lg bg-error text-white btn-sm">
-                                        <MdDelete size={20} />
-                                    </button>
-                                    <select onChange={(e) => updateRole(e, user._id)} className='py-2 px-4  border border-primary/50 rounded-lg font-semibold' name="" defaultValue={user.role} id="">
-                                        <option value='buyer' >Buyer</option>
-                                        <option value='worker' >Worker</option>
-                                        <option value='admin' >Admin</option>
-                                    </select>
+                        {users?.length > 0 ? (
+                            users.map((user) => (
+                                <tr key={user._id}>
+                                    <td>
+                                        <img
+                                            src={user.imageUrl}
+                                            alt={user.name}
+                                            className="w-10 h-10 object-cover rounded"
+                                        />
+                                    </td>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td className="capitalize">{user.role}</td>
+                                    <td>{user.coin}</td>
+                                    <td className="flex items-center gap-3 justify-center">
+                                        <button
+                                            onClick={() => handleDelete(user._id)}
+                                            className="p-2 font-semibold rounded-lg bg-error text-white btn-sm"
+                                        >
+                                            <MdDelete size={20} />
+                                        </button>
+                                        <select
+                                            onChange={(e) => updateRole(e, user._id)}
+                                            className="py-2 px-4 border border-primary/50 rounded-lg font-semibold"
+                                            defaultValue={user.role}
+                                        >
+                                            <option value="buyer">Buyer</option>
+                                            <option value="worker">Worker</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={6}>
+                                    <p className="text-center text-base-content/50 text-2xl font-bold py-6">
+                                        No Users Found
+                                    </p>
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>
+
         </div>
     );
 };

@@ -14,8 +14,11 @@ const Dashboard = () => {
     const role = userDetails.role
 
 
+
+
+
     useEffect(() => {
-        axios.get(`http://localhost:3000/users/${user?.email}`, {
+        axios.get(`https://microtaskserver.vercel.app/users/${user?.email}`, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
             }
@@ -25,10 +28,11 @@ const Dashboard = () => {
                 setLoading(false)
             })
 
+
     }, [user?.email, setLoading, user?.accessToken])
 
 
-    if (loading) {
+    if (!user || loading) {
         return <Loading />
     }
 

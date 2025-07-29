@@ -10,7 +10,7 @@ const PaymentHistory = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/payment-history/${email}`, {
+        axios.get(`https://microtaskserver.vercel.app/payment-history/${email}`, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
             }
