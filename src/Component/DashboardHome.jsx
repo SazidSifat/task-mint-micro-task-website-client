@@ -20,6 +20,7 @@ const DashboardHome = () => {
 
 
     useEffect(() => {
+        if (!user?.accessToken) return;
         axios.get(`https://microtaskserver.vercel.app/users/${user?.email}`, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`

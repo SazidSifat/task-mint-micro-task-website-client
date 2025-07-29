@@ -14,6 +14,7 @@ const TaskDetails = () => {
 
     const [task, setTask] = useState([]);
     useEffect(() => {
+            if (!user?.accessToken) return; 
 
         axios.get(`https://microtaskserver.vercel.app/tasks/${id}`, {
             headers: {

@@ -19,6 +19,7 @@ const Header = () => {
 
     // Fetch user details
     useEffect(() => {
+        if (!user?.accessToken) return;
         if (email) {
             axios
                 .get(`https://microtaskserver.vercel.app/users/${encodeURIComponent(email)}`, {
@@ -45,6 +46,7 @@ const Header = () => {
 
     // Fetch notifications
     useEffect(() => {
+        if (!user?.accessToken) return;
         if (email) {
             axios
                 .get(`https://microtaskserver.vercel.app/notification/${email}`, {

@@ -4,6 +4,7 @@ import useAuth from '../../Hook/useAuth';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Loading from '../../Shared/Loading';
+import { toast } from 'react-toastify';
 
 const AddTask = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -13,6 +14,7 @@ const AddTask = () => {
     const buyerName = user?.displayName
 
     useEffect(() => {
+        if (!user?.accessToken) return;
         if (buyerEmail) {
             axios
                 .get(`https://microtaskserver.vercel.app/users/${encodeURIComponent(buyerEmail)}`, {
@@ -42,7 +44,15 @@ const AddTask = () => {
 
         if (taskDetails && buyerEmail) {
             if (userDetails.coin < totalPayable) {
-                alert("Insufficient amount ,Please buy coin")
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "You don't have enough coin to add this task",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                
+                
 
             } else {
                 axios.post("https://microtaskserver.vercel.app/add-task", { task: taskDetails }, {
@@ -59,8 +69,7 @@ const AddTask = () => {
                                 title: "Your Task has been added Successfully",
                                 showConfirmButton: false,
                                 timer: 1500
-                            }
-                            )
+                            })
                         }
                     })
                     .catch(() => {

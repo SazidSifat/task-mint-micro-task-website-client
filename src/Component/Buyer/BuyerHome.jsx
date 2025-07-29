@@ -21,6 +21,7 @@ const BuyerHome = () => {
   let totalReqWorker = 0;
 
   useEffect(() => {
+        if (!user?.accessToken) return; 
     if (email) {
       setLoadingTasks(true);
       axios
@@ -41,6 +42,7 @@ const BuyerHome = () => {
   }, [email, user?.accessToken]);
 
   useEffect(() => {
+        if (!user?.accessToken) return; 
     if (email) {
       setLoadingSubmissions(true);
       axios

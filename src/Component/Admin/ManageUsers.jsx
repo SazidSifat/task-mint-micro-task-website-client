@@ -13,6 +13,7 @@ const ManageUsers = () => {
 
 
     useEffect(() => {
+        if (!user?.accessToken) return;
         setLoading(true);
         axios.get('https://microtaskserver.vercel.app/users', {
             headers: {
@@ -93,18 +94,18 @@ const ManageUsers = () => {
                         }
                     })
                     .catch((error) => {
-                const status = error.response?.status;
+                        const status = error.response?.status;
 
-                if (status === 401 || status === 400) {
-                    // No token or invalid token
-                    logout();
-                    navigate('/login');
-                } else if (status === 403) {
-                    navigate('/forbidden');
-                } else {
-                    console.error("Unexpected error", error);
-                }
-            })
+                        if (status === 401 || status === 400) {
+                            // No token or invalid token
+                            logout();
+                            navigate('/login');
+                        } else if (status === 403) {
+                            navigate('/forbidden');
+                        } else {
+                            console.error("Unexpected error", error);
+                        }
+                    })
             }
         });
     };

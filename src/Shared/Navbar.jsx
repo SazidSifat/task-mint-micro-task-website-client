@@ -16,6 +16,7 @@ const Navbar = () => {
 
 
     useEffect(() => {
+        if (!user?.accessToken) return;
         axios.get(`https://microtaskserver.vercel.app/users/${user?.email}`, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
@@ -24,7 +25,7 @@ const Navbar = () => {
             .then(res => {
                 setDbUser(res.data)
             })
-    }, [user?.email,user?.accessToken])
+    }, [user?.email, user?.accessToken])
 
 
 

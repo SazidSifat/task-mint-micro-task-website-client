@@ -25,6 +25,7 @@ const MyTask = () => {
 
     // Fetch tasks
     useEffect(() => {
+            if (!user?.accessToken) return; 
         if (email) {
             setLoadingTasks(true);
             axios

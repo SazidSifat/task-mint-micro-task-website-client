@@ -6,12 +6,13 @@ import { useNavigate } from "react-router";
 const WorkerHome = () => {
     const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user,logout } = useAuth();
+    const { user, logout } = useAuth();
     const email = user?.email;
     let totalEarning = 0;
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!user?.accessToken) return;
         if (email) {
             setLoading(true);
             axios.get(`https://microtaskserver.vercel.app/my-submitted-task/${email}`, {

@@ -9,8 +9,8 @@ const PaymentHistory = () => {
     const email = user?.email;
 
     useEffect(() => {
+        if (!user?.accessToken) return;
         if (!email) return;
-
         setLoading(true);
         axios
             .get(`https://microtaskserver.vercel.app/payment-history/${email}`, {

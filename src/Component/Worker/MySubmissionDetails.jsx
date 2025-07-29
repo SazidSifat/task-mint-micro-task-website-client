@@ -16,6 +16,7 @@ const MySubmissionDetails = () => {
     const tasksPerPage = 10; // Change this number to display more or fewer per page
 
     useEffect(() => {
+            if (!user?.accessToken) return; 
         if (!email) return;
 
         setLoading(true);

@@ -16,6 +16,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!user?.accessToken) return;
         axios.get(`https://microtaskserver.vercel.app/users/${user?.email}`, {
             headers: {
                 authorization: `Bearer ${user?.accessToken}`
@@ -29,7 +30,6 @@ const Dashboard = () => {
                 const status = error.response?.status;
 
                 if (status === 401 || status === 400) {
-                    // No token or invalid token
                     logout();
                     navigate('/login');
                 } else if (status === 403) {
