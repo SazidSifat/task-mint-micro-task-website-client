@@ -11,9 +11,6 @@ const Payment = () => {
         document.title = "Payment";
     }, []);
 
-
-
-
     return (
         <Elements stripe={stripePromise}>
             <PaymentForm />
