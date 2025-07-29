@@ -5,7 +5,7 @@ A modern and responsive web platform where users complete small tasks to earn re
 ## Live Site
 
 Visit the live site here:  
-https://your-live-site-link.web.app
+https://mircotask-c344d.web.app/
 
 ## Admin Access
 
@@ -73,7 +73,7 @@ https://your-live-site-link.web.app
 
 ## Client Repository
 
-[Insert your client repository URL here]
+https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-SazidSifat
 
 ---
 
