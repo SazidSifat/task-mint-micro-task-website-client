@@ -20,6 +20,7 @@ import TaskList from "../Component/Worker/TaskList";
 import TaskDetails from "../Component/Worker/TaskDetails";
 import MySubmissionDetails from "../Component/Worker/MySubmissionDetails";
 import Withdrawals from "../Component/Worker/Withdrawals";
+import NotFound from "../Pages/NotFound";
 
 
 
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
             }
 
         ]
+    },
+    {
+        path: '/*',
+        element: <NotFound />
     }
 ])
 

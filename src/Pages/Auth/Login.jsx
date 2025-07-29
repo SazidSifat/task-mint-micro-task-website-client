@@ -47,7 +47,7 @@ const Login = () => {
 
                 axios.post('https://microtaskserver.vercel.app/users', userInfo)
                     .then(() => { })
-                toast.success("Registration Successful")
+                toast.success("Login Successful")
                 navigate(state ? state : '/dashboard')
             })
             .catch(() => { })
@@ -82,8 +82,6 @@ const Login = () => {
                     <div className='divider'>OR</div>
                     <button onClick={handleGoogleLogin} className='w-full p-3 bg-secondary text-secondary-content font-bold rounded-lg'>Login with Google</button>
                     <p className='text-lg text-center font-semibold'> Don't Have Account. <span className='font-bold'><Link to="/register">Register</Link></span> </p>
-
-
                 </div>
             </div>
         </div>

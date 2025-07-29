@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -37,10 +39,16 @@ const testimonials = [
     },
 ];
 
-
 const Testimonial = () => {
+    useEffect(() => {
+        AOS.init({ duration: 800 });
+    }, []);
+
     return (
-        <section className="bg-base-100 container mx-auto  text-base-content py-14 px-4 md:px-16">
+        <section
+            className="bg-base-100 container mx-auto text-base-content py-14 px-4 md:px-16"
+            data-aos="fade-up"
+        >
             <h2 className="text-3xl font-bold text-center mb-10">What Our Users Say</h2>
 
             <Swiper
@@ -50,24 +58,18 @@ const Testimonial = () => {
                 autoplay={{ delay: 4000 }}
                 loop={true}
                 breakpoints={{
-                    0: {
-                        slidesPerView: 1,
-                    },
-                    640: {
-                        slidesPerView: 2,
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                    },
+                    0: { slidesPerView: 1 },
+                    640: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
                 }}
             >
                 {testimonials.map((testimonial, index) => (
                     <SwiperSlide key={index}>
-                        <div className="p-6 bg-base-200 rounded-box shadow hover:shadow-lg transition duration-300  text-center">
+                        <div className="p-6 bg-base-200 rounded-box shadow hover:shadow-xl hover:scale-[1.02] transition-all duration-300 text-center">
                             <img
                                 src={testimonial.photo}
                                 alt={testimonial.name}
-                                className="w-20 h-20 mx-auto rounded-full mb-4 border-4 border-primary"
+                                className="w-20 h-20 mx-auto rounded-full mb-4 border-4 border-primary object-cover"
                             />
                             <p className="text-base-content opacity-80 italic mb-4">"{testimonial.quote}"</p>
                             <h3 className="text-lg font-semibold text-primary">{testimonial.name}</h3>
