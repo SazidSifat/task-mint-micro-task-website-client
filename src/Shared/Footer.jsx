@@ -46,13 +46,13 @@ const Footer = () => {
                     <div className="space-y-3 col-span-2 sm:col-span-1">
                         <h3 className="tracking-wide uppercase">Social Media</h3>
                         <div className="flex space-x-4">
-                            <a href="#" className="hover:text-primary" title="Facebook">
+                            <a href="https://www.facebook.com/" target='_blank' className="hover:text-primary" title="Facebook">
                                 <FaFacebook size={24} />
                             </a>
-                            <a href="#" className="hover:text-primary" title="LinkedIn">
+                            <a href="https://www.linkedin.com/" target='_blank' className="hover:text-primary" title="LinkedIn">
                                 <FaLinkedin size={24} />
                             </a>
-                            <a href="#" className="hover:text-primary" title="GitHub">
+                            <a href="https://www.github.com/" target='_blank' className="hover:text-primary" title="GitHub">
                                 <FaGithub size={24} />
                             </a>
                         </div>
