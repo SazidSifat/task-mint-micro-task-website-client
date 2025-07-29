@@ -19,7 +19,6 @@ const Login = () => {
         document.title = "Login";
     }, []);
 
-
     const onSubmit = (data) => {
 
         signInWithEmailAndPass(data.email, data.password)
@@ -34,8 +33,6 @@ const Login = () => {
             })
 
     }
-
-
 
     const handleGoogleLogin = () => {
         googleSignIn()
@@ -56,8 +53,6 @@ const Login = () => {
             })
             .catch(() => { })
     }
-
-
 
     return (
         <div className='min-h-[90vh] flex items-center justify-center p-6  '>

@@ -23,8 +23,7 @@ const AdminHome = () => {
 
     useEffect(() => {
 
-        document.title = "Admin Dashboard";
-
+        document.title = "Admin Dashboard"; 
         const fetchData = async () => {
             try {
                 const userRes = await axios.get('https://microtaskserver.vercel.app/users');
