@@ -38,7 +38,7 @@ const WorkerHome = () => {
                     }
                 });
         }
-    }, [email, user?.accessToken]);
+    }, [email, user?.accessToken, logout, navigate]);
 
     const totalSubmission = submissions.length;
     const pendingSubmission = submissions.filter(s => s.status === "pending");

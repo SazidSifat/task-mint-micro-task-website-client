@@ -40,7 +40,7 @@ const MySubmissionDetails = () => {
                 }
             })
             .finally(() => setLoading(false));
-    }, [email, user?.accessToken]);
+    }, [email, user?.accessToken, logout, navigate]);
 
     // Calculate pagination indexes
     const indexOfLastTask = currentPage * tasksPerPage;

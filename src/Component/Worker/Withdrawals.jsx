@@ -11,7 +11,6 @@ const Withdrawals = () => {
     const [paymentSystem, setPaymentSystem] = useState("Bkash");
     const [accountNumber, setAccountNumber] = useState("");
     const [loading, setLoading] = useState(true); // ✅ loading state
-
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const { email, displayName } = user;
@@ -44,7 +43,7 @@ const Withdrawals = () => {
                     }
                 }); // handle error
         }
-    }, [email, user?.accessToken]);
+    }, [email, user?.accessToken,   logout, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -43,7 +43,7 @@ const DashboardHome = () => {
                 }
             })
 
-    }, [user?.email, setLoading, user?.accessToken])
+    }, [user?.email, setLoading, user?.accessToken, logout, navigate])
 
 
     if (loading) {
