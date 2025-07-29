@@ -5,21 +5,31 @@ import Swal from 'sweetalert2';
 import useAuth from '../../Hook/useAuth';
 
 const ManageUsers = () => {
-
-    const [users, setUsers] = useState([])
-    const { user } = useAuth()
-
-
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
 
     useEffect(() => {
-        axios.get('https://microtaskserver.vercel.app/users')
+        setLoading(true);
+        axios.get('https://microtaskserver.vercel.app/users', {
+            headers: {
+                authorization: `Bearer ${user?.accessToken}`
+            }
+        })
             .then(res => setUsers(res.data))
-
-    }, [setUsers])
+            .catch(() => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed to load users",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            })
+            .finally(() => setLoading(false));
+    }, [user?.accessToken]);
 
     const updateRole = (e, id) => {
-        const newRole = e.target.value
-
+        const newRole = e.target.value;
 
         axios.patch(`https://microtaskserver.vercel.app/update-role/${id}`, { role: newRole }, {
             headers: {
@@ -34,6 +44,9 @@ const ManageUsers = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
+                setUsers(prevUsers =>
+                    prevUsers.map(u => (u._id === id ? { ...u, role: newRole } : u))
+                );
             })
             .catch(() => {
                 Swal.fire({
@@ -43,10 +56,8 @@ const ManageUsers = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-
-            })
-    }
-
+            });
+    };
 
     const handleDelete = (id) => {
         Swal.fire({
@@ -59,7 +70,6 @@ const ManageUsers = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-
                 axios.delete(`https://microtaskserver.vercel.app/users/${id}`, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
@@ -67,24 +77,29 @@ const ManageUsers = () => {
                 })
                     .then(res => {
                         if (res.data.deletedCount) {
-
-                            const afterDelete = users.filter(user => user._id !== id)
-                            setUsers(afterDelete)
-
+                            setUsers(prev => prev.filter(user => user._id !== id));
                             Swal.fire({
                                 title: "Deleted!",
-                                text: "Your file has been deleted.",
+                                text: "User has been deleted.",
                                 icon: "success"
                             });
                         }
                     })
+                    .catch(() => {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Failed to delete user",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    });
             }
         });
-    }
+    };
 
     return (
         <div className="p-5">
-            <h2 className="text-2xl font-bold text-primary mb-6">My Posted Tasks</h2>
+            <h2 className="text-2xl font-bold text-primary mb-6">Manage Users</h2>
 
             <div className="overflow-x-auto rounded-xl shadow-lg border border-base-300">
                 <table className="table table-zebra w-full">
@@ -99,7 +114,13 @@ const ManageUsers = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users?.length > 0 ? (
+                        {loading ? (
+                            <tr>
+                                <td colSpan={6} className="text-center py-6">
+                                    <span className="loading loading-bars loading-xs"></span>
+                                </td>
+                            </tr>
+                        ) : users.length > 0 ? (
                             users.map((user) => (
                                 <tr key={user._id}>
                                     <td>
@@ -117,13 +138,14 @@ const ManageUsers = () => {
                                         <button
                                             onClick={() => handleDelete(user._id)}
                                             className="p-2 font-semibold rounded-lg bg-error text-white btn-sm"
+                                            aria-label={`Delete user ${user.name}`}
                                         >
                                             <MdDelete size={20} />
                                         </button>
                                         <select
                                             onChange={(e) => updateRole(e, user._id)}
                                             className="py-2 px-4 border border-primary/50 rounded-lg font-semibold"
-                                            defaultValue={user.role}
+                                            value={user.role}
                                         >
                                             <option value="buyer">Buyer</option>
                                             <option value="worker">Worker</option>
@@ -144,7 +166,6 @@ const ManageUsers = () => {
                     </tbody>
                 </table>
             </div>
-
         </div>
     );
 };

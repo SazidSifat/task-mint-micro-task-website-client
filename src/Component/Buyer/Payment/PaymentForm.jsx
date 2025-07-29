@@ -7,75 +7,72 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
 const PaymentForm = () => {
-    const stripe = useStripe()
-    const elements = useElements()
-    const { id } = useParams()
-    const { user } = useAuth()
-    const [errorMsg, setErrorMsg] = useState('')
-    const [coinP, setCoinP] = useState({})
-    useEffect(() => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const { id } = useParams();
+    const { user } = useAuth();
 
+    const [errorMsg, setErrorMsg] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [coinP, setCoinP] = useState({});
+
+    useEffect(() => {
         axios.get("/coinPackage.json")
             .then(res => {
-                const coinPackage = res.data.find(d => d.id === id)
-                setCoinP(coinPackage)
-            })
-    }, [id])
-
+                const coinPackage = res.data.find(d => d.id === id);
+                setCoinP(coinPackage);
+            });
+    }, [id]);
 
     const handlePayment = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        if (!stripe || !elements) {
-            return
-        }
+        if (!stripe || !elements) return;
 
-        const card = elements.getElement(CardElement)
-
-
-        if (!card) {
-            return
-        }
+        setLoading(true);
+        const card = elements.getElement(CardElement);
+        if (!card) return;
 
         const { error } = await stripe.createPaymentMethod({
             type: 'card',
             card
-
-        })
+        });
 
         if (error) {
-            setErrorMsg(error.message)
+            setErrorMsg(error.message);
+            setLoading(false);
+            return;
         } else {
-            setErrorMsg('')
+            setErrorMsg('');
         }
 
-        const amountInCents = parseInt(coinP.price) * 100
+        const amountInCents = parseInt(coinP.price) * 100;
 
-        // 
-        const res = await axios.post('https://microtaskserver.vercel.app/create-payment-intent', { amountInCents }, {
-            headers: {
-                authorization: `Bearer ${user?.accessToken}`
-            }
-        })
+        try {
+            const res = await axios.post('https://microtaskserver.vercel.app/create-payment-intent',
+                { amountInCents },
+                {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`
+                    }
+                });
 
-        const clientSecret = res.data.clientSecret
+            const clientSecret = res.data.clientSecret;
 
-
-        const result = await stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: elements.getElement(CardElement),
-                billing_details: {
-                    name: user.displayName,
-                    email: user.email
+            const result = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: card,
+                    billing_details: {
+                        name: user.displayName,
+                        email: user.email
+                    }
                 }
-            }
-        })
+            });
 
-        if (result.error) {
-            toast.error(result.error)
-        } else {
-            if (result.paymentIntent.status === 'succeeded') {
-
+            if (result.error) {
+                toast.error(result.error.message || "Payment failed.");
+                setLoading(false);
+            } else if (result.paymentIntent.status === 'succeeded') {
                 axios.post('https://microtaskserver.vercel.app/payment', {
                     coins: coinP.coins,
                     amount: amountInCents,
@@ -83,27 +80,29 @@ const PaymentForm = () => {
                     transactionID: result.paymentIntent.id,
                     email: user.email,
                     name: user.displayName
-
                 }, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
                     }
-                })
-                    .then(res => {
-                        if (res.data) {
-                            Swal.fire({
-                                title: "Payment Successful!",
-                                text: `${coinP.coins} coins are added to your account`,
-                                icon: "success",
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-
-                        }
-                    })
+                }).then(res => {
+                    if (res.data) {
+                        Swal.fire({
+                            title: "Payment Successful!",
+                            text: `${coinP.coins} coins are added to your account`,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                    setLoading(false);
+                });
             }
+        } catch (err) {
+            console.error(err);
+            toast.error("Something went wrong.");
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <form onSubmit={handlePayment} className="max-w-md mx-auto p-10 bg-white shadow-lg rounded-xl space-y-6">
@@ -112,21 +111,19 @@ const PaymentForm = () => {
             <div className="p-4 border rounded-md">
                 <CardElement />
             </div>
-            {
-                errorMsg && <p className='text-red-400'>{errorMsg}</p>
-            }
+
+            {errorMsg && <p className='text-red-400'>{errorMsg}</p>}
 
             <button
-
                 type="submit"
-                disabled={!stripe}
-                className={`w-full py-3 rounded-xl bg-primary text-primary-content font-medium transition `}
+                disabled={!stripe || loading}
+                className={`w-full py-3 rounded-xl bg-primary text-primary-content font-medium flex items-center justify-center gap-2 transition duration-300 ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
             >
-                Pay ${coinP.price}
+                {loading && <span className="loading loading-bars loading-xs"></span>}
+                {loading ? "Processing..." : `Pay $${coinP.price}`}
             </button>
         </form>
     );
 };
-
 
 export default PaymentForm;

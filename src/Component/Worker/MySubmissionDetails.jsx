@@ -48,9 +48,11 @@ const MySubmissionDetails = () => {
     };
 
     return (
-        <div className="overflow-x-auto rounded-xl mt-10 shadow-lg border border-base-300">
+        <div className="overflow-x-auto rounded-xl mt-10  ">
             {loading ? (
-                <Loading/>
+                <div className="flex justify-center mt-10">
+                    <span className="loading loading-bars loading-lg text-primary"></span>
+                </div>
             ) : tasks.length === 0 ? (
                 <p className="text-center p-4 text-gray-500">No submissions found.</p>
             ) : (
@@ -61,7 +63,7 @@ const MySubmissionDetails = () => {
                                 <th scope="col">Title</th>
                                 <th scope="col">Buyer Name</th>
                                 <th scope="col">Payable</th>
-                                <th scope="col">Submitted Date</th>
+                                <th scope="col">Submitted Date</th> 
                                 <th scope="col">Status</th>
                             </tr>
                         </thead>

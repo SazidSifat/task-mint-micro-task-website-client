@@ -4,35 +4,35 @@ import Swal from "sweetalert2";
 import useAuth from "../../Hook/useAuth";
 
 const Withdrawals = () => {
-
-    const [currentUser, setCurrentUser] = useState({})
+    const [currentUser, setCurrentUser] = useState({});
     const [withdrawCoin, setWithdrawCoin] = useState(0);
     const [withdrawAmount, setWithdrawAmount] = useState(0);
     const [paymentSystem, setPaymentSystem] = useState("Bkash");
     const [accountNumber, setAccountNumber] = useState("");
+    const [loading, setLoading] = useState(true); // ✅ loading state
 
-
-    const { user } = useAuth()
-    const { email, displayName } = user
-
+    const { user } = useAuth();
+    const { email, displayName } = user;
 
     useEffect(() => {
         if (email) {
-            axios.get(`https://microtaskserver.vercel.app/users/${email}`, {
-                headers: {
-                    authorization: `Bearer ${user?.accessToken}`
-                }
-            })
-                .then((res) => {
-                    setCurrentUser(res.data)
+            setLoading(true); // start loading
+            axios
+                .get(`https://microtaskserver.vercel.app/users/${email}`, {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`,
+                    },
                 })
+                .then((res) => {
+                    setCurrentUser(res.data);
+                    setLoading(false); // end loading
+                })
+                .catch(() => setLoading(false)); // handle error
         }
-    }, [email, user?.accessToken])
-
+    }, [email, user?.accessToken]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const withdrawData = {
             worker_email: email,
             worker_name: displayName,
@@ -41,111 +41,141 @@ const Withdrawals = () => {
             payment_system: paymentSystem,
             account_number: accountNumber,
             withdraw_date: new Date().toISOString(),
-            status: "pending"
+            status: "pending",
+        };
 
-        }
-
-
-        axios.post('https://microtaskserver.vercel.app/withdraw-request', { withdrawData: withdrawData }, {
-            headers: {
-                authorization: `Bearer ${user?.accessToken}`
-            }
-        })
-            .then(res => {
+        axios
+            .post(
+                "https://microtaskserver.vercel.app/withdraw-request",
+                { withdrawData: withdrawData },
+                {
+                    headers: {
+                        authorization: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            )
+            .then((res) => {
                 if (res.data) {
                     Swal.fire({
                         position: "center",
-                        title: "Withdraw request success ",
+                        title: "Withdraw request success",
                         text: "Wait for review",
                         icon: "success",
                         showConfirmButton: false,
-                        timer: 1500
-                    })
+                        timer: 1500,
+                    });
                 }
-            }
-            )
+            });
     };
 
     return (
-        <div className=" mx-auto p-6 space-y-6 ">
-            <h className="text-2xl font-bold text-primary text-center"> Withdraw Earnings</h>
+        <div className="mx-auto p-6 space-y-6">
+            <h2 className="text-2xl font-bold text-primary text-center">
+                Withdraw Earnings
+            </h2>
 
-            <div className="max-w-3xl mx-auto space-y-6">
-                <div className="bg-base-200 shadow border border-primary/50 rounded-xl py-10 px-6 space-y-3">
-                    <p className="text-base-content/80 text-2xl font-medium">
-                        <span className="text-accent ">Available Coins:</span> {currentUser.coin}
-                    </p>
-                    <p className="text-gray-700 text-xl font-medium">
-                        <span className="text-[#3b82f6]">Equivalent USD:</span> ${(parseFloat(currentUser.coin) / 20).toFixed(2)}
-                    </p>
+            {loading ? (
+                <div className="flex justify-center mt-10">
+                    <span className="loading loading-bars loading-lg text-primary"></span>
                 </div>
-
-                <form onSubmit={handleSubmit} className=" shadow  mx-auto border border-primary/80 rounded-xl p-5 space-y-5">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Coin to Withdraw</label>
-                        <input
-                            type="number"
-                            max={currentUser.coin}
-                            placeholder="00"
-                            min={200}
-                            required
-                            onChange={(e) => {
-                                setWithdrawCoin(Number(e.target.value))
-                                setWithdrawAmount((e.target.value / 20).toFixed(2))
-                            }}
-                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#5a716b]"
-                        />
+            ) : (
+                <div className="max-w-3xl mx-auto space-y-6">
+                    <div className="bg-base-200 shadow border border-primary/50 rounded-xl py-10 px-6 space-y-3">
+                        <p className="text-base-content/80 text-2xl font-medium">
+                            <span className="text-accent">Available Coins:</span>{" "}
+                            {currentUser.coin}
+                        </p>
+                        <p className="text-gray-700 text-xl font-medium">
+                            <span className="text-[#3b82f6]">Equivalent USD:</span>{" "}
+                            ${(parseFloat(currentUser.coin) / 20).toFixed(2)}
+                        </p>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Withdraw Amount ($)</label>
-                        <input
-                            type="number"
-                            placeholder="00"
-                            value={withdrawAmount}
-                            disabled
-                            className="w-full px-4 py-2 border bg-gray-100 rounded-md text-gray-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Select Payment System</label>
-                        <select
-                            name="paymentSystem"
-                            onChange={(e) => setPaymentSystem(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#5a716b]">
-                            <option value="Bkash">Bkash</option>
-                            <option value="Nagad">Nagad</option>
-                            <option value="Rocket">Rocket</option>
-                            <option value="Bank">Bank</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
-                        <input
-                            type="text"
-                            required
-                            onChange={(e) => setAccountNumber(e.target.value)}
-                            name="accountNumber"
-                            placeholder="Enter your account number"
-                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#5a716b]"
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={withdrawCoin > currentUser.coin}
-                        className={`w-full ${withdrawCoin > currentUser.coin ? "hidden" : "block "} bg-primary hover:bg-[#4c5e59] text-primary-content   font-semibold py-3 rounded-md transition`}
+                    <form
+                        onSubmit={handleSubmit}
+                        className="shadow mx-auto border border-primary/80 rounded-xl p-5 space-y-5"
                     >
-                        Request Withdrawal
-                    </button>
-                    <p className={withdrawCoin > currentUser.coin ? "block text-xl text-center text-error font-bold" : "hidden"}>Insufficient coin</p>
-                </form>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Coin to Withdraw
+                            </label>
+                            <input
+                                type="number"
+                                max={currentUser.coin}
+                                min={200}
+                                placeholder="00"
+                                required
+                                onChange={(e) => {
+                                    setWithdrawCoin(Number(e.target.value));
+                                    setWithdrawAmount(
+                                        (e.target.value / 20).toFixed(2)
+                                    );
+                                }}
+                                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#5a716b]"
+                            />
+                        </div>
 
-            </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Withdraw Amount ($)
+                            </label>
+                            <input
+                                type="number"
+                                value={withdrawAmount}
+                                disabled
+                                className="w-full px-4 py-2 border bg-gray-100 rounded-md text-gray-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Select Payment System
+                            </label>
+                            <select
+                                onChange={(e) => setPaymentSystem(e.target.value)}
+                                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#5a716b]"
+                            >
+                                <option value="Bkash">Bkash</option>
+                                <option value="Nagad">Nagad</option>
+                                <option value="Rocket">Rocket</option>
+                                <option value="Bank">Bank</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Account Number
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                onChange={(e) => setAccountNumber(e.target.value)}
+                                placeholder="Enter your account number"
+                                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#5a716b]"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={withdrawCoin > currentUser.coin}
+                            className={`w-full ${withdrawCoin > currentUser.coin ? "hidden" : "block"
+                                } bg-primary hover:bg-[#4c5e59] text-primary-content font-semibold py-3 rounded-md transition`}
+                        >
+                            Request Withdrawal
+                        </button>
+                        <p
+                            className={
+                                withdrawCoin > currentUser.coin
+                                    ? "block text-xl text-center text-error font-bold"
+                                    : "hidden"
+                            }
+                        >
+                            Insufficient coin
+                        </p>
+                    </form>
+                </div>
+            )}
         </div>
-
     );
 };
 

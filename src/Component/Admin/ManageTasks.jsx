@@ -5,15 +5,19 @@ import Swal from 'sweetalert2';
 import useAuth from '../../Hook/useAuth';
 
 const ManageTasks = () => {
-
-    const [tasks, setTasks] = useState([])
-    const { user } = useAuth()
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { user } = useAuth();
 
     useEffect(() => {
+        setLoading(true);
         axios.get('https://microtaskserver.vercel.app/tasks')
-            .then(res => setTasks(res.data))
-
-    }, [setTasks])
+            .then(res => {
+                setTasks(res.data);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
+    }, []);
 
     const handleDelete = (id) => {
         Swal.fire({
@@ -26,7 +30,6 @@ const ManageTasks = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-
                 axios.delete(`https://microtaskserver.vercel.app/tasks/${id}`, {
                     headers: {
                         authorization: `Bearer ${user?.accessToken}`
@@ -34,20 +37,18 @@ const ManageTasks = () => {
                 })
                     .then(res => {
                         if (res.data.deletedCount) {
-                            const afterDelete = tasks.filter(task => task._id !== id)
-                            setTasks(afterDelete)
-
+                            const afterDelete = tasks.filter(task => task._id !== id);
+                            setTasks(afterDelete);
                             Swal.fire({
                                 title: "Deleted!",
-                                text: "Your file has been deleted.",
+                                text: "Your task has been deleted.",
                                 icon: "success"
                             });
                         }
-                    })
+                    });
             }
         });
-    }
-
+    };
 
     return (
         <div className="p-5">
@@ -66,7 +67,15 @@ const ManageTasks = () => {
                     </thead>
 
                     <tbody>
-                        {tasks.length !== 0 ? (
+                        {loading ? (
+                            <tr>
+                                <td colSpan={5}>
+                                    <div className="flex justify-center items-center py-10">
+                                        <span className="loading loading-bars loading-xs"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : tasks.length > 0 ? (
                             tasks.map((task) => (
                                 <tr key={task._id}>
                                     <td className="text-center">{task.task_title}</td>
@@ -95,9 +104,8 @@ const ManageTasks = () => {
                     </tbody>
                 </table>
             </div>
-
         </div>
     );
-}
+};
 
 export default ManageTasks;
