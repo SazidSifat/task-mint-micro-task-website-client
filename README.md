@@ -71,10 +71,4 @@ https://mircotask-c344d.web.app/
 
 ---
 
-## Client Repository
-
-https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-SazidSifat
-
----
-
 If you encounter any issues or have questions, please feel free to reach out.
