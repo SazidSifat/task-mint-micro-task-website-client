@@ -9,7 +9,7 @@ https://mircotask-c344d.web.app/
 
 ## Admin Access
 
-- Email: admin@microtask.com
+- Email: admin@admin.com
 - Password: Admin@123
 
 > Please replace the above credentials and URL with your actual admin info and deployment link.
