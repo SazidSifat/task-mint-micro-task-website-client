@@ -25,6 +25,7 @@ import About from "../Pages/About";
 import Contact from "../Pages/Contact";
 import Tasks from "../Pages/Tasks";
 import TaskDetail from "../Pages/TaskDetail";
+import AdminProfile from "../Component/Admin/AdminProfile";
 
 const router = createBrowserRouter([
   {
@@ -160,7 +161,16 @@ const router = createBrowserRouter([
             <Withdrawals />
           </PrivateRoute>
         ),
+
       },
+      {
+        path: "/dashboard/profile",
+        element: (
+          <PrivateRoute>
+            <AdminProfile />
+          </PrivateRoute>
+        ),
+    }
     ],
   },
   {

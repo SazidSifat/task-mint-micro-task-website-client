@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
-import { data } from "react-router";
+import { data, Link } from "react-router";
 
 const FeatureTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -55,24 +55,28 @@ const FeatureTask = () => {
                       Pay: {task.totalPayable}
                     </span>
                     <span className="font-sm text-gray-500">
-                      Deadline: {task.completion_date}  
+                      Deadline: {task.completion_date}
                     </span>
                   </div>
                 </div>
 
                 {/* Bottom Button */}
-                {/* <div className="card-actions mt-4">
-                  <button className="btn w-full btn-primary">
-                    View Details
-                  </button>
-                </div> */}
+                <div className="card-actions mt-4">
+                  <Link to={`/taskDetails/${task._id}`} className="w-full">
+                    <button className="btn w-full btn-primary">
+                      View Details
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
         </div>
 
         <div className="mt-10 w-full text-center">
-          <button className="btn btn-primary btn-wide">See All Tasks</button>
+          <Link to="/tasks" className="btn btn-primary">
+            View All Tasks
+          </Link>
         </div>
       </div>
     </section>
