@@ -18,7 +18,6 @@ const TaskDetail = () => {
         },
       })
       .then(({ data }) => {
-        console.log(data);
         setTask(data);
       });
   }, [id, user?.accessToken]);

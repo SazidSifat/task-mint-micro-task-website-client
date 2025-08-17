@@ -14,10 +14,8 @@ const AdminProfile = () => {
         },
       })
       .then(({ data }) => {
-        console.log(data);
         setUsers(data);
       })
-      .catch((err) =>);
   }, [user?.email, user?.accessToken]);
 
   if (!users) {
