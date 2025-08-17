@@ -1,8 +1,31 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { IoClose } from "react-icons/io5";
-import { FaHome, FaPlusCircle, FaTasks, FaCoins, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaHome,
+  FaPlusCircle,
+  FaTasks,
+  FaCoins,
+  FaUserCircle,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import useAuth from "../../Hook/useAuth";
+import { toast } from "react-toastify";
 
 const WorkerSidebar = ({ isOpen, onClose }) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        navigate("/login");
+        toast.success("Logout Successful");
+      })
+      .catch(() => {
+        toast.error("Logout Failed");
+      });
+  };
+
   return (
     <aside
       className={`
@@ -84,9 +107,8 @@ const WorkerSidebar = ({ isOpen, onClose }) => {
           </NavLink>
 
           <Link
-            onClick={onClose}
-            to="/logout"
-            className="py-3 w-full gap-2 flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right"
+            onClick={handleLogout}
+            className="py-3 w-full gap-2 border border-error bg-red-300 text-black flex items-center justify-center hover:bg-error hover:text-secondary-content rounded-2xl text-right"
           >
             <FaSignOutAlt /> Logout
           </Link>

@@ -1,16 +1,32 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import { IoClose } from "react-icons/io5";
-import { FaHome, FaRegUser, FaTasks, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaHome,
+  FaRegUser,
+  FaTasks,
+  FaUserCircle,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import useAuth from "../../Hook/useAuth";
+import { toast } from "react-toastify";
 
 const AdminSidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // উদাহরণ
-    navigate("/login");
+    logout()
+      .then(() => {
+        navigate("/login");
+        toast.success("Logout Successful");
+      })
+      .catch(() => {
+        toast.error("Logout Failed");
+      });
   };
 
-  const linkClass = "py-3 w-full gap-2 flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right";
+  const linkClass =
+    "py-3 w-full gap-2 flex items-center justify-center hover:bg-secondary hover:text-secondary-content rounded-2xl text-right";
 
   return (
     <aside
@@ -41,22 +57,37 @@ const AdminSidebar = ({ isOpen, onClose }) => {
             <FaHome /> Home
           </Link>
 
-          <NavLink onClick={onClose} to="/dashboard/manage-users" className={linkClass}>
+          <NavLink
+            onClick={onClose}
+            to="/dashboard/manage-users"
+            className={linkClass}
+          >
             <FaRegUser /> Manage Users
           </NavLink>
 
-          <NavLink onClick={onClose} to="/dashboard/manage-tasks" className={linkClass}>
+          <NavLink
+            onClick={onClose}
+            to="/dashboard/manage-tasks"
+            className={linkClass}
+          >
             <FaTasks /> Manage Tasks
           </NavLink>
         </div>
 
         {/* Profile & Logout at the bottom */}
         <div className="flex flex-col gap-2">
-          <NavLink onClick={onClose} to="/dashboard/profile" className={linkClass}>
+          <NavLink
+            onClick={onClose}
+            to="/dashboard/profile"
+            className={linkClass}
+          >
             <FaUserCircle /> Profile
           </NavLink>
 
-          <button onClick={handleLogout} className={`${linkClass} text-left flex border border-error bg-error text-black/80 hover:bg-red-400 items-center justify-center`}>
+          <button
+            onClick={handleLogout}
+            className={`${linkClass} text-left flex border border-error bg-error text-black/80 hover:bg-red-400 items-center justify-center`}
+          >
             <FaSignOutAlt /> Logout
           </button>
         </div>
