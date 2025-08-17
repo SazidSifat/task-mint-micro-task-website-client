@@ -12,7 +12,7 @@ const TaskDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/tasks/${id}`, {
+      .get(`https://microtaskserver.vercel.app/tasks/${id}`, {
         headers: {
           authorization: `Bearer ${user?.accessToken}`,
         },

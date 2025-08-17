@@ -8,7 +8,7 @@ const AdminProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/users/${user?.email}`, {
+      .get(`https://microtaskserver.vercel.app/users/${user?.email}`, {
         headers: {
           authorization: `Bearer ${user?.accessToken}`,
         },

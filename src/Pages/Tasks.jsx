@@ -9,7 +9,7 @@ const Tasks = () => {
   const [sortOrder, setSortOrder] = useState(""); 
 
   useEffect(() => {
-    axios.get("http://localhost:3000/tasks").then(({ data }) => {
+    axios.get("https://microtaskserver.vercel.app/tasks").then(({ data }) => {
       setTasks(data);
     });
   }, []);

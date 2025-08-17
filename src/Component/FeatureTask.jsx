@@ -12,7 +12,7 @@ const FeatureTask = () => {
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/feature-task").then(({ data }) => {
+    axios.get("https://microtaskserver.vercel.app/feature-task").then(({ data }) => {
       console.log(data);
       setTasks(data);
     });
