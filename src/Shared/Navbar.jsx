@@ -75,9 +75,9 @@ const Navbar = () => {
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               <img
+                referrerpolicy="no-referrer"
                 src={
-                  user.photoURL ||
-                  "https://i.ibb.co/MBtjqXQ/default-avatar.png"
+                  user.photoURL || "https://i.ibb.co/MBtjqXQ/default-avatar.png"
                 }
                 alt="profile"
                 className="w-10 h-10 rounded-full border-2 border-secondary"
