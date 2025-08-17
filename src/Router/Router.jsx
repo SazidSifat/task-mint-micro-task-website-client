@@ -21,92 +21,152 @@ import TaskDetails from "../Component/Worker/TaskDetails";
 import MySubmissionDetails from "../Component/Worker/MySubmissionDetails";
 import Withdrawals from "../Component/Worker/Withdrawals";
 import NotFound from "../Pages/NotFound";
-
-
-
+import About from "../Pages/About";
+import Contact from "../Pages/Contact";
+import Tasks from "../Pages/Tasks";
+import TaskDetail from "../Pages/TaskDetail";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        Component: HomeLayout,
-        children: [
-            {
-                index: true,
-                element: <Home />
-            },
-            {
-                path: '/login',
-                Component: Login
-            },
-            {
-                path: '/register',
-                Component: Register
-            }
-        ]
-    },
-    {
-        path: "/dashboard",
-        Component: Dashboard,
-        children: [
-            {
-                index: true,
-                Component: DashboardHome
-            },
-            {
-                path: "/dashboard/add-task",
-                element: <PrivateRoute><AddTask /></PrivateRoute>
-
-            },
-            {
-                path: "/dashboard/my-tasks",
-                element: <PrivateRoute><MyTask /></PrivateRoute>
-            },
-            {
-                path: "/dashboard/purchase-coin",
-                element: <PrivateRoute><PurchaseCoin /></PrivateRoute>
-
-            },
-            {
-                path: "/dashboard/payment/:id",
-                element: <PrivateRoute><Payment /></PrivateRoute>
-            },
-            {
-                path: 'dashboard/payment-history/:email',
-                element: <PrivateRoute><PaymentHistory /></PrivateRoute>,
-            },
-            {
-                path: "/dashboard/manage-users",
-                element: <PrivateRoute><ManageUsers /></PrivateRoute>
-            },
-            {
-                path: "/dashboard/manage-tasks",
-                element: <PrivateRoute><ManageTasks /></PrivateRoute>
-            },
-            {
-                path: '/dashboard/task-list',
-                element: <PrivateRoute><TaskList /></PrivateRoute>
-            },
-            {
-
-                path: '/dashboard/task-list/:id',
-                element: <PrivateRoute><TaskDetails /></PrivateRoute>
-            },
-            {
-                path: '/dashboard/my-submission',
-                element: <PrivateRoute><MySubmissionDetails /></PrivateRoute>
-
-            }
-            , {
-                path: '/dashboard/withdraw',
-                element: <PrivateRoute><Withdrawals /></PrivateRoute>
-            }
-
-        ]
-    },
-    {
-        path: '/*',
-        element: <NotFound />
-    }
-])
+  {
+    path: "/",
+    Component: HomeLayout,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "/login",
+        Component: Login,
+      },
+      {
+        path: "/register",
+        Component: Register,
+      },
+      {
+        path: "about",
+        Component: About,
+      },
+      {
+        path: "contact",
+        Component: Contact,
+      },
+      {
+        path: "tasks",
+        Component: Tasks,
+      },
+      {
+        path: "taskDetails/:id",
+        element: (
+          <PrivateRoute>
+            <TaskDetail />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    Component: Dashboard,
+    children: [
+      {
+        index: true,
+        Component: DashboardHome,
+      },
+      {
+        path: "/dashboard/add-task",
+        element: (
+          <PrivateRoute>
+            <AddTask />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/my-tasks",
+        element: (
+          <PrivateRoute>
+            <MyTask />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/purchase-coin",
+        element: (
+          <PrivateRoute>
+            <PurchaseCoin />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/payment/:id",
+        element: (
+          <PrivateRoute>
+            <Payment />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "dashboard/payment-history/:email",
+        element: (
+          <PrivateRoute>
+            <PaymentHistory />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/manage-users",
+        element: (
+          <PrivateRoute>
+            <ManageUsers />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/manage-tasks",
+        element: (
+          <PrivateRoute>
+            <ManageTasks />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/task-list",
+        element: (
+          <PrivateRoute>
+            <TaskList />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/task-list/:id",
+        element: (
+          <PrivateRoute>
+            <TaskDetails />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/my-submission",
+        element: (
+          <PrivateRoute>
+            <MySubmissionDetails />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/withdraw",
+        element: (
+          <PrivateRoute>
+            <Withdrawals />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/*",
+    element: <NotFound />,
+  },
+]);
 
 export default router;
