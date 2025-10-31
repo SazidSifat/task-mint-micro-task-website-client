@@ -15,13 +15,12 @@ const Home = () => {
     Aos.init({ duration: 800 });
   }, []);
   return (
-    <div className="space-y-20 mb-10">
+    <div className="">
       <Banner />
       <FeatureTask />
       <BestWorker />
       <Testimonial />
       <HowItWorks />
-      <CallToActionSection/>
       <WhyChooseUs />
       <Newsletter />
     </div>

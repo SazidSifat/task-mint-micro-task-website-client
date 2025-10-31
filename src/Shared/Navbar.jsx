@@ -31,7 +31,6 @@ const Navbar = () => {
       .catch(() => toast.error("Logout Failed"));
   };
 
-  // ৫টি route
   const routes = [
     { path: "/", name: "Home" },
     { path: "/tasks", name: "Tasks" },
@@ -40,133 +39,120 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="p-5 container mx-auto flex items-center justify-between relative">
-      {/* Logo */}
-      <Link to="/" className="text-3xl font-semibold">
-        Task Mint
-      </Link>
+    <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#5a716b] to-[#3f504c] shadow-xl backdrop-blur-md">
+      <div className="container mx-auto flex justify-between items-center p-5 relative">
+        {/* Logo */}
+        <Link to="/" className="text-3xl font-bold text-white hover:text-secondary transition-colors">
+          Task Mint
+        </Link>
 
-      {/* Middle Routes */}
-      <div className="hidden lg:flex gap-8 font-semibold text-lg">
-        {routes.map((r, i) => (
-          <NavLink
-            key={i}
-            to={r.path}
-            className={({ isActive }) =>
-              `transition-colors ${
-                isActive
-                  ? "text-secondary border-b-2 border-secondary pb-1"
+        {/* Desktop Links */}
+        <div className="hidden lg:flex gap-8 font-semibold text-lg text-white">
+          {routes.map((r, i) => (
+            <NavLink
+              key={i}
+              to={r.path}
+              className={({ isActive }) =>
+                `relative transition-colors ${isActive
+                  ? "text-secondary after:w-full after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:bg-secondary after:rounded-full"
                   : "hover:text-secondary"
-              }`
-            }
-          >
-            {r.name}
-          </NavLink>
-        ))}
-      </div>
-
-      {/* Right Side */}
-      <div className="flex items-center gap-6 relative">
-        {user ? (
-          <div className="relative">
-            {/* Profile + Coin */}
-            <div
-              className="flex items-center gap-3 cursor-pointer"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+                }`
+              }
             >
-              <img
-                referrerpolicy="no-referrer"
-                src={
-                  user.photoURL || "https://i.ibb.co/MBtjqXQ/default-avatar.png"
-                }
-                alt="profile"
-                className="w-10 h-10 rounded-full border-2 border-secondary"
-              />
-              <div className="flex items-center gap-1 bg-yellow-400 text-black px-3 py-1 rounded-full font-bold shadow-md">
-                <ImCoinDollar /> {dbUser?.coin || 0}
+              {r.name}
+            </NavLink>
+          ))}
+        </div>
+
+        {/* User Section */}
+        <div className="flex items-center gap-6 relative">
+          {user ? (
+            <div className="relative">
+              <div
+                className="flex items-center gap-3 cursor-pointer transition-all"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <img
+                  referrerPolicy="no-referrer"
+                  src={user.photoURL || "https://i.ibb.co/MBtjqXQ/default-avatar.png"}
+                  alt="profile"
+                  className="w-10 h-10 rounded-full border-2 border-white hover:scale-105 transition-transform"
+                />
+                <div className="flex items-center gap-1 bg-yellow-400 text-black px-3 py-1 rounded-full font-bold shadow-md animate-pulse">
+                  <ImCoinDollar /> {dbUser?.coin || 0}
+                </div>
               </div>
+
+              {/* Dropdown */}
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-3 w-44 bg-white text-gray-800 rounded-xl shadow-lg z-50 text-center border border-gray-200">
+                  <NavLink
+                    to="/dashboard"
+                    className="block px-4 py-2 hover:bg-secondary/20 rounded-t-xl font-semibold"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Dashboard
+                  </NavLink>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full px-4 py-2 text-red-600 hover:bg-red-100 rounded-b-xl"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
+          ) : (
+            <div className="hidden lg:flex items-center gap-6 font-semibold text-white">
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  `py-1 px-3 rounded hover:bg-white/20 transition-colors ${isActive ? "bg-white/20" : ""
+                  }`
+                }
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/register"
+                className={({ isActive }) =>
+                  `py-1 px-3 rounded hover:bg-white/20 transition-colors ${isActive ? "bg-white/20" : ""
+                  }`
+                }
+              >
+                Register
+              </NavLink>
+            </div>
+          )}
 
-            {/* Dropdown */}
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-3 w-40 bg-base-300 text-base-content rounded-xl shadow-lg z-50 text-center">
-                <NavLink
-                  to="/dashboard"
-                  className="block px-4 py-2 hover:bg-secondary/30 rounded-t-xl font-semibold"
-                  onClick={() => setDropdownOpen(false)}
-                >
-                  Dashboard
-                </NavLink>
-                <button
-                  onClick={handleLogout}
-                  className="w-full px-4 py-2 text-red-600 hover:bg-red-200 rounded-b-xl"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+          {/* Mobile Menu Icon */}
+          <div className="lg:hidden">
+            <FaBars
+              size={28}
+              className="text-white cursor-pointer hover:text-secondary transition-colors"
+              onClick={() => setIsOpen(!isOpen)}
+            />
           </div>
-        ) : (
-          <div className="font-semibold flex space-x-6 text-base">
-            <NavLink
-              to="/login"
-              className={({ isActive }) =>
-                `py-1 px-2 hidden lg:block ${
-                  isActive ? "border-b-2 border-secondary" : "hover:border-b"
-                }`
-              }
-            >
-              Login
-            </NavLink>
-            <NavLink
-              to="/register"
-              className={({ isActive }) =>
-                `py-1 px-2 hidden lg:block ${
-                  isActive ? "border-b-2 border-secondary" : "hover:border-b"
-                }`
-              }
-            >
-              Register
-            </NavLink>
-          </div>
-        )}
-
-        {/* Mobile Menu Icon */}
-        <div className="lg:hidden">
-          <FaBars
-            size={28}
-            className="cursor-pointer hover:text-secondary"
-            onClick={() => setIsOpen(!isOpen)}
-          />
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div
-        className={`absolute lg:hidden bg-base-300/40 text-base-content backdrop-blur-2xl w-[70%] h-screen ${
-          isOpen ? "left-0 top-0" : "-left-[1000px] top-0"
-        } duration-500 flex flex-col items-center text-center py-10`}
+        className={`lg:hidden fixed top-0 left-0 h-screen w-3/4 bg-[#5a716b]/90 backdrop-blur-sm z-40 transition-all duration-500 ${isOpen ? "left-0" : "-left-[1000px]"
+          } flex flex-col items-center text-white pt-20`}
       >
-        <div className="absolute bg-base-300 hover:bg-secondary right-3 top-4 p-1 rounded">
-          <RxCross1 size={30} onClick={() => setIsOpen(!isOpen)} />
+        <div className="absolute right-5 top-5">
+          <RxCross1 size={30} onClick={() => setIsOpen(false)} className="cursor-pointer" />
         </div>
 
-        <h1 className="text-3xl font-bold mt-6">Task Mint</h1>
-        <div className="divider"></div>
-
-        {/* Mobile Routes */}
-        <div className="flex flex-col gap-6 text-lg font-bold">
+        <div className="flex flex-col gap-8 text-xl font-semibold">
           {routes.map((r, i) => (
             <NavLink
               key={i}
               to={r.path}
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
-                `transition-colors ${
-                  isActive
-                    ? "text-secondary border-b-2 border-secondary"
-                    : "hover:text-secondary"
-                }`
+                `transition-colors ${isActive ? "text-secondary" : "hover:text-secondary"}`
               }
             >
               {r.name}
@@ -177,14 +163,14 @@ const Navbar = () => {
             <>
               <NavLink
                 to="/dashboard"
-                className="py-2 hover:border-b"
+                className="py-2 hover:text-secondary"
                 onClick={() => setIsOpen(false)}
               >
                 Dashboard
               </NavLink>
               <button
                 onClick={handleLogout}
-                className="py-2 text-red-600 hover:border-b"
+                className="py-2 text-red-600 hover:text-red-400"
               >
                 Logout
               </button>
@@ -193,14 +179,14 @@ const Navbar = () => {
             <>
               <NavLink
                 to="/login"
-                className="py-2 hover:border-b"
+                className="py-2 hover:text-secondary"
                 onClick={() => setIsOpen(false)}
               >
                 Login
               </NavLink>
               <NavLink
                 to="/register"
-                className="py-2 hover:border-b"
+                className="py-2 hover:text-secondary"
                 onClick={() => setIsOpen(false)}
               >
                 Register
@@ -209,7 +195,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

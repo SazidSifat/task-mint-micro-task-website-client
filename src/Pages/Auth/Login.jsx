@@ -1,87 +1,89 @@
-import React, { useEffect } from 'react';
-import AuthContext from '../../Context/AuthContext';
-import Loading from '../../Shared/Loading';
-import { useForm } from 'react-hook-form';
-import useAuth from '../../Hook/useAuth';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useLocation, useNavigate } from "react-router";
+import useAuth from "../../Hook/useAuth";
+import { toast } from "react-toastify";
+import { FaGoogle } from "react-icons/fa";
 
 const Login = () => {
-
-    const { register, handleSubmit, formState: { errors } } = useForm()
-    const { signInWithEmailAndPass, googleSignIn } = useAuth()
-
-    const navigate = useNavigate()
-    const { state } = useLocation()
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { signInWithEmailPass, googleSignIn } = useAuth();
+    const navigate = useNavigate();
+    const { state } = useLocation();
 
     useEffect(() => {
         document.title = "Login";
     }, []);
 
     const onSubmit = (data) => {
-
-        signInWithEmailAndPass(data.email, data.password)
+        signInWithEmailPass(data.email, data.password)
             .then(() => {
-                toast.success("Login Successful")
-                navigate(state ? state : '/dashboard')
+                toast.success("Login Successful");
+                navigate(state ? state : "/dashboard");
             })
-            .catch(err => {
-                if (err.code === "auth/invalid-credential") {
-                    toast.error("Invalid Email or password")
-                }
-            })
-
-    }
+            .catch(() => toast.error("Invalid Email or Password"));
+    };
 
     const handleGoogleLogin = () => {
         googleSignIn()
-            .then(res => {
-                const user = res.user
-                const userInfo = {
-                    name: user.displayName,
-                    email: user.email,
-                    role: 'worker',
-                    coin: 10,
-                    imageUrl: user.photoURL,
-                }
-
-                axios.post('https://microtaskserver.vercel.app/users', userInfo)
-                    .then(() => { })
-                toast.success("Login Successful")
-                navigate(state ? state : '/dashboard')
+            .then(() => {
+                toast.success("Login Successful");
+                navigate(state ? state : "/dashboard");
             })
-            .catch(() => { })
-    }
+            .catch(() => toast.error("Google Sign-In Failed"));
+    };
 
     return (
-        <div className='min-h-[90vh] flex items-center justify-center p-6  '>
-            <div className='w-5xl mx-auto backdrop-blur-3xl border border-primary shadow-2xl rounded-2xl px-10 py-20 flex gap-6 
-            '>
-                <div className='flex-1 hidden md:block'>
-                    <img src="" alt="" />
+        <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-100 overflow-hidden">
+            {/* Decorative Background Elements */}
+            <div className="absolute top-10 left-10 opacity-20 text-9xl text-indigo-200 rotate-12 select-none pointer-events-none">⚡</div>
+            <div className="absolute bottom-20 right-20 opacity-20 text-8xl text-purple-200 -rotate-12 select-none pointer-events-none">💻</div>
+            <div className="absolute top-1/3 right-1/4 opacity-10 w-40 h-40 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-1/4 left-1/3 opacity-10 w-32 h-32 bg-indigo-300 rounded-full mix-blend-multiply filter blur-2xl animate-pulse"></div>
 
+            {/* Login Card */}
+            <div className="relative z-10 w-full max-w-md p-10 bg-white/70 backdrop-blur-md rounded-3xl shadow-2xl flex flex-col gap-6">
+                <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">Login</h1>
+
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        {...register("email", { required: "Email is required" })}
+                        className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none"
+                    />
+                    {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        {...register("password", { required: "Password is required" })}
+                        className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none"
+                    />
+                    {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+
+                    <button className="w-full py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition">
+                        Login
+                    </button>
+                </form>
+
+                <div className="flex items-center justify-center gap-4 mt-4">
+                    <span className="text-gray-400">OR</span>
                 </div>
-                <div className="divider lg:divider-horizontal"></div>
-                <div className='flex-1 space-y-6 '>
 
-                    <h1 className='text-4xl text-center py-6 font-bold'>Login Now</h1>
+                <button
+                    onClick={handleGoogleLogin}
+                    className="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-xl hover:bg-indigo-50 transition font-semibold text-gray-700"
+                >
+                    <FaGoogle className="text-red-500" /> Login with Google
+                </button>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2' >
-
-                        <input {...register("email", { required: "Email Field Required" })} type="text" placeholder='name@example.com' className='w-full p-3 rounded-lg border border-primary  ' />
-                        {errors.email?.type === 'required' && <p className='text-sm text-error pl-2' >{errors.email.message}</p>}
-
-                        <input {...register("password", { required: "Password Field Required." })} name='password' type="password" placeholder='**********  ' className='w-full p-3 rounded-lg border border-primary' />
-                        {errors.password?.type === 'required' && <p className='text-sm text-error pl-2' >{errors.password.message}</p>}
-
-
-                        <button className='w-full p-3 bg-primary text-primary-content font-bold rounded-lg'>Login</button>
-                    </form>
-                    <div className='divider'>OR</div>
-                    <button onClick={handleGoogleLogin} className='w-full p-3 bg-secondary text-secondary-content font-bold rounded-lg'>Login with Google</button>
-                    <p className='text-lg text-center font-semibold'> Don't Have Account. <span className='font-bold'><Link to="/register">Register</Link></span> </p>
-                </div>
+                <p className="text-center text-gray-600 mt-4">
+                    Don't have an account?{" "}
+                    <Link to="/register" className="text-primary font-semibold hover:underline">
+                        Register
+                    </Link>
+                </p>
             </div>
         </div>
     );

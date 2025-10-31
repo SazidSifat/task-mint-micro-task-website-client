@@ -1,96 +1,140 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { ImCoinDollar } from "react-icons/im";
-import { NavLink } from "react-router"; // React Router DOM
+import { Link } from "react-router";
+import { DollarSign, Calendar, ArrowRight } from "react-feather"; // Feather Icons
 import axios from "axios";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
-  const [sortOrder, setSortOrder] = useState(""); 
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     axios.get("https://microtaskserver.vercel.app/tasks").then(({ data }) => {
       setTasks(data);
+      setIsVisible(true);
     });
   }, []);
 
-  const handleSort = (order) => {
-    setSortOrder(order);
-    const sorted = [...tasks].sort((a, b) => {
-      if (order === "asc") return a.totalPayable - b.totalPayable;
-      if (order === "desc") return b.totalPayable - a.totalPayable;
-      return 0;
-    });
-    setTasks(sorted);
-  };
-
   return (
-    <section className="py-20 bg-base-200">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl font-bold text-secondary mb-6">
+    <section className="py-24 bg-gray-100 min-h-screen">
+      <div className="container mx-auto px-6">
+        <h2 className="text-4xl font-extrabold text-gray-800 mb-12 text-center">
           Available Tasks
         </h2>
 
-        {/* Sorting Buttons */}
-        <div className="flex justify-center gap-4 mb-12">
-          <button
-            onClick={() => handleSort("asc")}
-            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary/70 transition"
-          >
-            Sort by Price ↑
-          </button>
-          <button
-            onClick={() => handleSort("desc")}
-            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary/70 transition"
-          >
-            Sort by Price ↓
-          </button>
-        </div>
-
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {tasks.map((task, i) => (
-            <motion.div
+          {tasks.map((task, index) => (
+            <div
               key={task._id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.2, duration: 0.6 }}
-              className="bg-white border border-primary/50 rounded-2xl shadow-lg hover:shadow-2xl transition flex flex-col justify-between overflow-hidden"
+              className={`group relative bg-white rounded-2xl overflow-hidden transition-all duration-500 ${isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-20"
+                }`}
+              style={{
+                transitionDelay: `${600 + index * 100}ms`,
+                boxShadow:
+                  hoveredCard === task._id
+                    ? "0 25px 50px -12px rgba(90, 113, 107, 0.25)"
+                    : "0 10px 30px -10px rgba(0, 0, 0, 0.1)",
+                border: "1px solid #e5e7e6",
+              }}
+              onMouseEnter={() => setHoveredCard(task._id)}
+              onMouseLeave={() => setHoveredCard(null)}
             >
-              {/* Task Image */}
-              <img
-                src={task.task_image || "/fallback.jpg"}
-                alt={task.task_title}
-                className="w-full h-48 object-cover"
-              />
+              {/* Image */}
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={task.task_image || "/fallback.jpg"}
+                  alt={task.task_title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div
+                  className="absolute inset-0 transition-opacity duration-300"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(30, 41, 59, 0.8), transparent)",
+                    opacity: hoveredCard === task._id ? 1 : 0.7,
+                  }}
+                />
+              </div>
 
-              {/* Task Content */}
-              <div className="p-6 flex flex-col justify-between flex-1">
-                <div>
-                  <h3 className="text-xl text-left font-semibold text-primary mb-2">
-                    {task.task_title}
-                  </h3>
-                  {/* <p className="text-gray-700 mb-4">{task.description}</p> */}
-                </div>
+              {/* Card Body */}
+              <div className="p-6 relative z-10">
+                <h3
+                  className="text-xl font-bold mb-4 line-clamp-2 min-h-[56px]"
+                  style={{ color: "#1e293b" }}
+                >
+                  {task.task_title}
+                </h3>
 
-                {/* Payable & Deadline */}
-                <div className="flex justify-between items-center mb-4">
-                  <span className="flex items-center gap-1 font-bold text-yellow-500">
-                    <ImCoinDollar /> {task.totalPayable}
-                  </span>
-                  <span className="text-gray-500 text-sm">
-                    Deadline: {task.completion_date}
-                  </span>
+                {/* Info Section */}
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center justify-between">
+                    {/* Payment */}
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="p-2 rounded-lg"
+                        style={{
+                          backgroundColor: "rgba(90, 113, 107, 0.1)",
+                        }}
+                      >
+                        <DollarSign className="w-4 h-4" style={{ color: "#5a716b" }} />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Payment</p>
+                        <p className="font-bold" style={{ color: "#5a716b" }}>
+                          ${task.totalPayable}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Deadline */}
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="p-2 rounded-lg"
+                        style={{
+                          backgroundColor: "rgba(90, 113, 107, 0.1)",
+                        }}
+                      >
+                        <Calendar className="w-4 h-4" style={{ color: "#5a716b" }} />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Deadline</p>
+                        <p className="font-semibold text-xs text-gray-700">
+                          {task.completion_date}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* View Button */}
-                <NavLink
-                  to={`/taskDetails/${task._id}`}
-                  className="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary/70 transition"
-                >
-                  View
-                </NavLink>
+                <Link to={`/taskDetails/${task._id}`} className="block">
+                  <button
+                    className="w-full py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+                    style={{
+                      backgroundColor:
+                        hoveredCard === task._id
+                          ? "#5a716b"
+                          : "rgba(90, 113, 107, 0.1)",
+                      color: hoveredCard === task._id ? "white" : "#5a716b",
+                    }}
+                  >
+                    View Details
+                    <ArrowRight
+                      className={`w-4 h-4 transition-transform duration-300 ${hoveredCard === task._id ? "translate-x-1" : ""
+                        }`}
+                    />
+                  </button>
+                </Link>
+
+                {/* Decorative Corner */}
+                <div
+                  className="absolute bottom-0 right-0 w-24 h-24 opacity-5 rounded-tl-full"
+                  style={{ background: "#5a716b" }}
+                ></div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
