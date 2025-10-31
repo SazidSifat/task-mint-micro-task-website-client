@@ -14,10 +14,6 @@ const HomeLayout = () => {
         return <Loading />
     }
 
-
-
-
-
     return (
         <div>
             <div className='bg-primary text-primary-content sticky top-0 z-50'>
